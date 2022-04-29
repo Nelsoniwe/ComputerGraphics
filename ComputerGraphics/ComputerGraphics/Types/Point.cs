@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Text;
+
+namespace ComputerGraphics.Types
+{
+    public class Point
+    {
+        private double x;
+        private double y;
+        private double z;
+
+        public Point(double x, double y, double z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public double X
+        {
+            get { return this.x; }
+        }
+        public double Y
+        {
+            get { return this.y; }
+        }
+        public double Z
+        {
+            get { return this.z; }
+        }
+
+        public static Vector operator +(Point point, Vector vector)
+        {
+            return new Vector(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
+        }
+
+    }
+}
