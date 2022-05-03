@@ -36,5 +36,9 @@ namespace ComputerGraphics.Types
             return new Vector(point.X + vector.X, point.Y + vector.Y, point.Z + vector.Z);
         }
 
+        public static Vector operator -(Point pointOne, Point pointTwo)
+        {
+            return new Vector(pointOne.X - pointTwo.X, pointOne.Y - pointTwo.Y, pointOne.Z - pointTwo.Z);
+        }
     }
 }
