@@ -35,6 +35,16 @@ namespace ComputerGraphics.Types
             return (float)Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
         }
 
+        public static Vector Normilize(Vector vector)
+        {
+            var mag = vector.Magnitude();
+            if (mag >0)
+            {
+                return new Vector(vector.X / mag, vector.Y / mag, vector.Z / mag);
+            }
+            return vector;
+        }
+
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
