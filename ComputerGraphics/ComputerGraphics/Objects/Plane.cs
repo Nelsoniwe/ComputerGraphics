@@ -30,5 +30,23 @@ namespace ComputerGraphics.Objects
 
             return false;
         }
+
+        public Point WhereIntercept(Point start, Vector direction)
+        {
+            if (direction * normal == 0)
+            {
+                throw new ArgumentException("No interception there");
+            }
+            Vector k = start - center;
+            var t = -((k * normal) / (direction * normal));
+
+            if (t < 0)
+                throw new ArgumentException("No interception there");
+
+            var x = start.X + t * direction.X;
+            var y = start.Y + t * direction.Y;
+            var z = start.Z + t * direction.Z;
+            return new Point(x, y, z);
+        }
     }
 }
