@@ -23,7 +23,7 @@ namespace ComputerGraphics.Objects
             Vector k = start - center;
             var t = -((k * normal) / (direction * normal));
 
-            if (t >= 0)
+            if (t > 0)
             {
                 return true;
             }

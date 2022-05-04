@@ -29,7 +29,36 @@ namespace ComputerGraphics.Objects
             var b = 2 * (direction * k);//+
             var c = k * k - radius * radius;//+
             var D = b * b - 4 * a * c;
-            return D >= 0;
+
+            if (D < 0)
+                return false;
+            var t = (-b - Math.Sqrt(D)) / (2 * a);
+
+            if (t >= 0)
+                return true;
+            return false;
+        }
+
+        public Point WhereIntercept(Point start, Vector direction)
+        {
+            Vector k = start - center; //+
+            var a = direction * direction; //+
+            var b = 2 * (direction * k);//+
+            var c = k * k - radius * radius;//+
+            var D = b * b - 4 * a * c;
+
+            if (D < 0)
+                throw new ArgumentException("No interception there");
+
+            var t = (-b - Math.Sqrt(D)) / (2 * a);
+
+            if (t<0)
+                throw new ArgumentException("No interception there");
+
+            var x = start.X + t * direction.X;
+            var y = start.Y + t * direction.Y;
+            var z = start.Z + t * direction.Z;
+            return new Point(x, y, z);
         }
     }
 }
