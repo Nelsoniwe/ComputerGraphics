@@ -51,7 +51,7 @@ namespace ComputerGraphics.Objects
 
         public Vector GetNormal(Point point)
         {
-            return normal + new Vector(point.X, point.Y, point.Z);
+            return normal;
         }
     }
 }
