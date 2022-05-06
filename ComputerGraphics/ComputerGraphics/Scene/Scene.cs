@@ -79,7 +79,12 @@ namespace ComputerGraphics.Scene
                             {
                                 minDistance = distance;
                                
-                                minNumber = light.Vector * Vector.Normilize(Objects[i].GetNormal(intercept));
+                                minNumber = light.Vector * Objects[i].GetNormal(intercept);
+
+                                if (i==2)
+                                {
+                                    
+                                }
                             }
                             
                         }
