@@ -17,6 +17,11 @@ namespace ComputerGraphics.Types
             this.z = z;
         }
 
+        public static Vector GetVectorWithPoints(Point p1, Point p2)
+        {
+            return new Vector(p2.X - p1.X, p2.Y - p1.Y, p2.Z - p1.Z);
+        }
+
         public double X
         {
             get { return this.x; }
@@ -64,6 +69,7 @@ namespace ComputerGraphics.Types
         {
             return v1.X == v2.X && v1.Y == v2.Y && v1.Z == v2.Z;
         }
+
         public static float operator *(Vector v1, Vector v2)
         {
             return (float)(v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z);

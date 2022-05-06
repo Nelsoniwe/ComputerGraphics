@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Objects;
 using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Scene
@@ -10,6 +11,7 @@ namespace ComputerGraphics.Scene
     {
         private List<IObject> Objects = new List<IObject>();
         private Camera camera;
+        private Light light;
 
         public Scene(Camera camera)
         {
@@ -19,6 +21,11 @@ namespace ComputerGraphics.Scene
         public void AddObject(IObject addObject)
         {
             Objects.Add(addObject);
+        }
+
+        public void AddLight(Light light)
+        {
+            this.light = light;
         }
 
         public double[,] getScreenArray()
@@ -55,16 +62,34 @@ namespace ComputerGraphics.Scene
                     var xOnPlane = xNorm * realPlaneWidht / 2;
                     var yOnPlane = yNorm * realPlaneHeight / 2;
 
-                    Vector positionOnPlane = planeOrigin + new Vector(xOnPlane, yOnPlane, 0);
+                    Vector positionOnPlane = planeOrigin + new Vector(xOnPlane, yOnPlane * 0.5, 0);
+
+                    //трасувальний промінь
                     Vector ray = positionOnPlane - new Vector(cameraPos.X,cameraPos.Y,cameraPos.Z);
+                    double minNumber = Int32.MaxValue;
+                    double minDistance = Int32.MaxValue;
 
                     for (int i = 0; i < Objects.Count; i++)
                     {
                         if (Objects[i].IsIntersection(cameraPos, ray))
-                            screen[x, y] = 1;
-                        else if(screen[x, y] != 1)
-                            screen[x, y] = 0;
+                        {
+                            Point intercept = Objects[i].WhereIntercept(cameraPos, ray);
+                            double distance = Point.Distance(intercept, cameraPos);
+                            if(distance < minDistance)
+                            {
+                                minDistance = distance;
+                               
+                                minNumber = light.Vector * Vector.Normilize(Objects[i].GetNormal(intercept));
+                            }
+                            
+                        }
+                            
                     }
+                    screen[x, y] = minNumber;
+                    if(minDistance == Int32.MaxValue)
+                        screen[x, y] = 0;
+                    else
+                        screen[x, y] = minNumber;
                 }
             }
 

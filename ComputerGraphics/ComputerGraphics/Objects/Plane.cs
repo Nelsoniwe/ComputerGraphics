@@ -48,5 +48,10 @@ namespace ComputerGraphics.Objects
             var z = start.Z + t * direction.Z;
             return new Point(x, y, z);
         }
+
+        public Vector GetNormal(Point point)
+        {
+            return normal + new Vector(point.X, point.Y, point.Z);
+        }
     }
 }
