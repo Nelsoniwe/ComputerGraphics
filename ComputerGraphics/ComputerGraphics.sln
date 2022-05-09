@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31702.278
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComputerGraphics", "ComputerGraphics\ComputerGraphics.csproj", "{60335CCD-C4DA-471B-9BF8-E20BB5C20B01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ComputerGraphics", "ComputerGraphics\ComputerGraphics.csproj", "{60335CCD-C4DA-471B-9BF8-E20BB5C20B01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{348B848F-6150-418D-A2F1-CE4C916A8469}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{60335CCD-C4DA-471B-9BF8-E20BB5C20B01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60335CCD-C4DA-471B-9BF8-E20BB5C20B01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60335CCD-C4DA-471B-9BF8-E20BB5C20B01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{348B848F-6150-418D-A2F1-CE4C916A8469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{348B848F-6150-418D-A2F1-CE4C916A8469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{348B848F-6150-418D-A2F1-CE4C916A8469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{348B848F-6150-418D-A2F1-CE4C916A8469}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

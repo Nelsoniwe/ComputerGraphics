@@ -28,6 +28,30 @@ namespace ComputerGraphics.Scene
             this.light = light;
         }
 
+        public static double theNearest(Vector vector, List<IObject> objects, Point camera, out IObject obj, out Point intercept)
+        {
+            double minDistance = Int32.MaxValue;
+            obj = null;
+            intercept = null;
+            for (int i = 0; i < objects.Count; i++)
+            {
+                if (objects[i].IsIntersection(camera, vector))
+                {
+                    Point tempIntercept = objects[i].WhereIntercept(camera, vector);
+                    double distance = Point.Distance(tempIntercept, camera);
+                    if (distance < minDistance)
+                    {
+                        minDistance = distance;
+                        obj = objects[i];
+                        intercept = tempIntercept;
+                    }
+
+                }
+            }
+            return minDistance;
+
+        }
+
         public double[,] getScreenArray()
         {
             camera.RefreshScreen();
@@ -66,30 +90,12 @@ namespace ComputerGraphics.Scene
 
                     //трасувальний промінь
                     Vector ray = positionOnPlane - new Vector(cameraPos.X,cameraPos.Y,cameraPos.Z);
-                    double minNumber = Int32.MaxValue;
-                    double minDistance = Int32.MaxValue;
-
-                    for (int i = 0; i < Objects.Count; i++)
+                    double minDistance = theNearest(ray, Objects, cameraPos, out IObject nearestObj, out Point nearestIntercept);
+                    if (nearestIntercept != null)
                     {
-                        if (Objects[i].IsIntersection(cameraPos, ray))
-                        {
-                            Point intercept = Objects[i].WhereIntercept(cameraPos, ray);
-                            double distance = Point.Distance(intercept, cameraPos);
-                            if(distance < minDistance)
-                            {
-                                minDistance = distance;
-                               
-                                minNumber = light.Vector * Vector.Normilize(Objects[i].GetNormal(intercept));
-                            }
-                            
-                        }
-                            
-                    }
-                    screen[x, y] = minNumber;
-                    if(minDistance == Int32.MaxValue)
-                        screen[x, y] = 0;
-                    else
+                        double minNumber = light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept));
                         screen[x, y] = minNumber;
+                    }
                 }
             }
 

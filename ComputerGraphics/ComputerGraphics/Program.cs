@@ -67,7 +67,9 @@ namespace ComputerGraphics
                 Console.WriteLine();
             }
 
-           
+
+
+
         }
     }
 }
