@@ -34,6 +34,10 @@ namespace ComputerGraphics.Scene
             {
                 return direction;
             }
+            set
+            {
+                direction = value;
+            }
         }
 
         public Point Position
