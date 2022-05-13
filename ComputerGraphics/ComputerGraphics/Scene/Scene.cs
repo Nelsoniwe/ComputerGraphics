@@ -76,8 +76,8 @@ namespace ComputerGraphics.Scene
                 for (int y = 0; y < height; y++)
                 {
 
-                    var xNorm = (x - width / 2) / (double)width;
-                    var yNorm = -(y - height / 2) / (double)height;
+                    var xNorm = -(x - width / 2) / (double)width;
+                    var yNorm = (y - height / 2) / (double)height;
                     float distanceToPlaneFromCamera = 1;
                     var fovInRad = fov / 180f * Math.PI;
                     double realPlaneHeight = (distanceToPlaneFromCamera * Math.Tan(fovInRad));

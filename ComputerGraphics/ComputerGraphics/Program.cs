@@ -13,14 +13,14 @@ namespace ComputerGraphics
         //{
         //    Camera camera = new Camera(new Point(0, 0, -10), new Vector(0, 0, 1), 50, 211);
         //    Scene.Scene scene = new Scene.Scene(camera);
-        //    Sphere sphere = new Sphere(new Point(-2, -2, 100), 4);
+        //    Sphere sphere = new Sphere(new Point(2, -2, 100), 4);
         //    scene.AddObject(sphere);
         //    Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
         //    scene.AddObject(sphere2);
-        //    Light light = new Light(new Vector(0.5, 0.5, 0.7));
+        //    Light light = new Light(new Vector(-0.5, 0.5, 0.7));
         //    scene.AddLight(light);
 
-        //    Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
+        //    Plane plane = new Plane(new Point(-5, 1, 1), new Vector(-1, 0, 0));
         //    scene.AddObject(plane);
 
         //    double[,] screen = scene.getScreenArray();
@@ -75,16 +75,16 @@ namespace ComputerGraphics
         //animated version
         static void Main(string[] args)
         {
-            Camera camera = new Camera(new Point(0, -10, -10), new Vector(0, 0, 1), 50, 211);
+            Camera camera = new Camera(new Point(0, 0, -15), new Vector(0, 0, 1), 50, 211);
             Scene.Scene scene = new Scene.Scene(camera);
-            Sphere sphere = new Sphere(new Point(-2, 0, 100), 4);
+            Sphere sphere = new Sphere(new Point(2, -2, 100), 4);
             scene.AddObject(sphere);
-            Sphere sphere2 = new Sphere(new Point(0, -10, 20), 2);
+            Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
             scene.AddObject(sphere2);
-            Light light = new Light(new Vector(0.5, 0.5, 0.7));
+            Light light = new Light(new Vector(-0.5, 0.5, 0.7));
             scene.AddLight(light);
 
-            Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
+            Plane plane = new Plane(new Point(-5, 1, 1), new Vector(-1, 0, 0));
             scene.AddObject(plane);
 
             double angle = 0;
@@ -93,7 +93,7 @@ namespace ComputerGraphics
             {
                 double[,] screen = scene.getScreenArray();
 
-                Console.SetCursorPosition(0,0);
+                Console.SetCursorPosition(0, 0);
                 Thread.Sleep(1);
 
                 double yDiff = light.Vector.X;
@@ -104,9 +104,9 @@ namespace ComputerGraphics
                 //Rotate the vector
                 float y = (float)((Math.Cos(angle) * zDiff) - (Math.Sin(angle) * yDiff));
                 float z = (float)((Math.Sin(angle) * zDiff) + (Math.Cos(angle) * yDiff));
-                
+
                 //camera.Direction = (new Vector(camera.Direction.X,y, z));
-                light.setLight(new Vector(1,y,z));
+                light.setLight(new Vector(-1, y, z));
 
                 for (int i = 0; i < 50; i++)
                 {
@@ -152,7 +152,7 @@ namespace ComputerGraphics
                 }
             }
 
-            
+
 
 
         }

@@ -14,31 +14,32 @@ namespace ComputerGraphics.Objects
             this.center = center;
             this.normal = Vector.Normilize(vector);
         }
+
         public bool IsIntersection(Point start, Vector direction)
         {
-            if (direction * normal == 0)
-            {
-                return false;
-            }
-            Vector k = start - center;
-            var t = -((k * normal) / (direction * normal));
+            float denom = normal* direction;
 
-            if (t > 0)
+            if (denom > 0)
             {
-                return true;
+                Vector k = center - start;
+                var t = k * normal / denom;
+                return (t >= 0);
             }
-
+            
             return false;
         }
 
         public Point WhereIntercept(Point start, Vector direction)
         {
-            if (direction * normal == 0)
+            float denom = normal * direction;
+
+            if (denom < 0)
             {
                 throw new ArgumentException("No interception there");
             }
-            Vector k = start - center;
-            var t = -((k * normal) / (direction * normal));
+
+            Vector k = center - start;
+            var t = k * normal / denom;
 
             if (t < 0)
                 throw new ArgumentException("No interception there");
