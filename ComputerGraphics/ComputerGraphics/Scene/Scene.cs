@@ -65,8 +65,8 @@ namespace ComputerGraphics.Scene
             int width = screen.GetUpperBound(0); //width
             int height = screen.GetUpperBound(1); //height 
 
-            var aspectRatio = width / height;
-            
+            var aspectRatio = height / width;
+            var pixelRatio = (24 / 11);
             //Console.WriteLine("a : " + a.X + " " + a.Y + " "+ a.Z);
 
 
@@ -76,7 +76,7 @@ namespace ComputerGraphics.Scene
                 for (int y = 0; y < height; y++)
                 {
 
-                    var xNorm = -(x - width / 2) / (double)width;
+                    var xNorm = -(x - width / 2) / (double)width * aspectRatio;
                     var yNorm = (y - height / 2) / (double)height;
                     float distanceToPlaneFromCamera = 1;
                     var fovInRad = fov / 180f * Math.PI;
@@ -86,14 +86,18 @@ namespace ComputerGraphics.Scene
                     var xOnPlane = xNorm * realPlaneWidht / 2;
                     var yOnPlane = yNorm * realPlaneHeight / 2;
 
-                    Vector positionOnPlane = planeOrigin + new Vector(xOnPlane, yOnPlane * 0.5, 0);
+                    Vector positionOnPlane = planeOrigin + new Vector(xOnPlane, yOnPlane, 0);
 
                     //трасувальний промінь
                     Vector ray = positionOnPlane - new Vector(cameraPos.X,cameraPos.Y,cameraPos.Z);
                     double minDistance = theNearest(ray, Objects, cameraPos, out IObject nearestObj, out Point nearestIntercept);
                     if (nearestIntercept != null)
                     {
-                        double minNumber = light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept));
+                        double minNumber = 0;
+                        if (light != null)
+                            minNumber = light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept));
+                        else
+                            minNumber = 0;
                         screen[x, y] = minNumber;
                     }
                 }
