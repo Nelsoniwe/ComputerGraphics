@@ -111,7 +111,11 @@ namespace ComputerGraphics.Scene
                             minNumber = 0;
                         screen[x, y] = minNumber;
                     }
+
+                    
                 }
+                Console.SetCursorPosition(0, 0);
+                Console.Write($"{x}/{width}");
             }
 
             return screen;
