@@ -63,7 +63,7 @@ namespace ComputerGraphics.Objects
 
         public Vector GetNormal(Point point)
         {
-            return Vector.GetVectorWithPoints(point, center);
+            return Vector.GetVectorWithPoints(center,point);
         }
     }
 }

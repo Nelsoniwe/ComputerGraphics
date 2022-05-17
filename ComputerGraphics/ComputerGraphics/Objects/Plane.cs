@@ -17,12 +17,12 @@ namespace ComputerGraphics.Objects
 
         public bool IsIntersection(Point start, Vector direction)
         {
-            float denom = normal* direction;
+            float denom = -(normal * direction);
 
             if (denom > 0)
             {
                 Vector k = center - start;
-                var t = k * normal / denom;
+                var t = -(k * normal) / denom;
                 return (t >= 0);
             }
             
@@ -31,7 +31,7 @@ namespace ComputerGraphics.Objects
 
         public Point WhereIntercept(Point start, Vector direction)
         {
-            float denom = normal * direction;
+            float denom = -(normal * direction);
 
             if (denom < 0)
             {
@@ -39,7 +39,7 @@ namespace ComputerGraphics.Objects
             }
 
             Vector k = center - start;
-            var t = k * normal / denom;
+            var t = -(k * normal) / denom;
 
             if (t < 0)
                 throw new ArgumentException("No interception there");

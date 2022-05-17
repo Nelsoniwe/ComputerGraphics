@@ -23,6 +23,5 @@ namespace ComputerGraphics.Objects
         {
             vector = Vector.Normilize(newVector);
         }
-
     }
 }

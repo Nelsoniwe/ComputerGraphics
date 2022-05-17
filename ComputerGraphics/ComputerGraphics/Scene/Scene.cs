@@ -95,7 +95,7 @@ namespace ComputerGraphics.Scene
                     {
                         double minNumber = 0;
                         if (light != null)
-                            minNumber = light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept));
+                            minNumber = -(light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept)));
                         else
                             minNumber = 0;
                         screen[x, y] = minNumber;

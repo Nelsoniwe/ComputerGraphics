@@ -9,6 +9,5 @@ namespace ComputerGraphics.Interfaces
         public Point WhereIntercept(Point start, Vector direction);
 
         public Vector GetNormal(Point point);
-
     }
 }

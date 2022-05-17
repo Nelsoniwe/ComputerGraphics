@@ -70,26 +70,24 @@ namespace ComputerGraphics.Types
             return new Vector(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
 
-        public static bool operator ==(Vector v1, Vector v2)
-        {
-            return v1.X == v2.X && v1.Y == v2.Y && v1.Z == v2.Z;
-        }
+        
 
         public static float operator *(Vector v1, Vector v2)
         {
             return (float)(v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z);
         }
-        public static bool operator !=(Vector v1, Vector v2)
-        {
-            return !(v1.X != v2.X && v1.Y != v2.Y && v1.Z != v2.Z);
-        }
-
+        
         public static Vector Cross(Vector u, Vector v)
         {
             return new Vector(
                 u.Y * v.Z - u.Z * v.Y,
                 u.Z * v.X - u.X * v.Z,
                 u.X * v.Y - u.Y * v.X);
+        }
+
+        public static double Len(Vector u)
+        {
+            return Math.Sqrt(u * u);
         }
     }
 }

@@ -14,6 +14,9 @@ namespace ComputerGraphics
         static void Main(string[] args)
         {
             //4k 3840 x 2160 pixel
+            //int width = 1280;
+            //int height = 720;
+
             int width = 1280;
             int height = 720;
 
@@ -23,11 +26,17 @@ namespace ComputerGraphics
             scene.AddObject(sphere);
             Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
             scene.AddObject(sphere2);
-            Light light = new Light(new Vector(-0.5, 0.5, 0.7));
+            //Light light = new Light(new Vector(-0.5, 0.5, 0.7));
+            Light light = new Light(new Vector(-1, 1, 1));
             scene.AddLight(light);
 
+            Triangle triangle = new Triangle(new Point(0, 0, 30), new Point(-2, -2, 30), new Point(-2, 2, 3),new Vector(1,0,-1), new Vector(1, 0, -1), new Vector(-1, 0, -1));
+            //Triangle triangle = new Triangle(new Point(0, 0, 0), new Point(-2, -2, 0), new Point(-2, 2, 0));
+
+            scene.AddObject(triangle);
+
             // Plane plane = new Plane(new Point(-1000, 1, 1), new Vector(-1, 0, 1));
-            Plane plane = new Plane(new Point(-5, 1, 1), new Vector(-1, 0, 0));
+            Plane plane = new Plane(new Point(-5, 1, 1), new Vector(1, 0, 0));
             scene.AddObject(plane);
 
             double[,] screen = scene.getScreenArray();
@@ -63,7 +72,7 @@ namespace ComputerGraphics
                 destination.WriteLine(output);
                 output.Clear();
 
-                Console.SetCursorPosition(0,0);
+                Console.SetCursorPosition(0, 0);
                 Console.Write(Convert.ToInt32(i));
                 Console.Write("/");
                 Console.Write(height);
@@ -72,5 +81,6 @@ namespace ComputerGraphics
             destination.Close();
             Console.WriteLine("file created");
         }
+
     }
 }
