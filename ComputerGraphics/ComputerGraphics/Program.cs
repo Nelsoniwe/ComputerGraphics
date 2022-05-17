@@ -20,23 +20,25 @@ namespace ComputerGraphics
             int width = 1280;
             int height = 720;
 
-            Camera camera = new Camera(new Point(0, 0, -10), new Vector(0, 0, 1), height, width);
+            Camera camera = new Camera(new Point(2, 0, -10), new Vector(0, 0, 1), height, width);
             Scene.Scene scene = new Scene.Scene(camera);
-            Sphere sphere = new Sphere(new Point(2, -2, 100), 4);
+            Sphere sphere = new Sphere(new Point(4, -2, 100), 4);
             scene.AddObject(sphere);
-            Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
+            Sphere sphere2 = new Sphere(new Point(2, 2, 10), 2);
             scene.AddObject(sphere2);
+            Sphere sphere3 = new Sphere(new Point(4, -2, 8), 2);
+            scene.AddObject(sphere3);
             //Light light = new Light(new Vector(-0.5, 0.5, 0.7));
             Light light = new Light(new Vector(-1, 1, 1));
             scene.AddLight(light);
 
-            Triangle triangle = new Triangle(new Point(0, 0, 30), new Point(-2, -2, 30), new Point(-2, 2, 3),new Vector(1,0,-1), new Vector(1, 0, -1), new Vector(-1, 0, -1));
-            //Triangle triangle = new Triangle(new Point(0, 0, 0), new Point(-2, -2, 0), new Point(-2, 2, 0));
+            //Triangle triangle = new Triangle(new Point(1, 0, 0), new Point(0, 0, 0), new Point(0, 1, -1),new Vector(1,0,-1), new Vector(1, 0, -1), new Vector(-1, 0, -1));
+            //Triangle triangle = new Triangle(new Point(0, 1, 0), new Point(-1, 0, 0), new Point(0, 0, 0));
 
-            scene.AddObject(triangle);
+            //scene.AddObject(triangle);
 
             // Plane plane = new Plane(new Point(-1000, 1, 1), new Vector(-1, 0, 1));
-            Plane plane = new Plane(new Point(-5, 1, 1), new Vector(1, 0, 0));
+            Plane plane = new Plane(new Point(0, 1, 1), new Vector(1, 0, 0));
             scene.AddObject(plane);
 
             double[,] screen = scene.getScreenArray();

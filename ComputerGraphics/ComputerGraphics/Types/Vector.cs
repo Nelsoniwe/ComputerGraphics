@@ -89,5 +89,10 @@ namespace ComputerGraphics.Types
         {
             return Math.Sqrt(u * u);
         }
+
+        public static Vector Negate(Vector u)
+        {
+            return new Vector(-u.X, -u.Y, -u.Z);
+        }
     }
 }

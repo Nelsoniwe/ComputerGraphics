@@ -67,8 +67,6 @@ namespace ComputerGraphics.Scene
 
             var aspectRatio = height / width;
             var pixelRatio = (24 / 11);
-            //Console.WriteLine("a : " + a.X + " " + a.Y + " "+ a.Z);
-
 
             for (int x = 0; x < width; x++)
             {
@@ -95,7 +93,20 @@ namespace ComputerGraphics.Scene
                     {
                         double minNumber = 0;
                         if (light != null)
+                        {
+                            Vector shadowVector = Vector.Negate(light.Vector);
+                            bool isShadow = false;
+
+                            //foreach (var obj in Objects)
+                            //{
+                            //    if (obj.IsIntersection(nearestIntercept, shadowVector))
+                            //        isShadow = true;
+                            //}
+
                             minNumber = -(light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept)));
+                            if (isShadow)
+                                minNumber /= 2;
+                        }
                         else
                             minNumber = 0;
                         screen[x, y] = minNumber;
