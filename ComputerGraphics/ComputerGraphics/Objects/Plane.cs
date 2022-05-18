@@ -34,9 +34,7 @@ namespace ComputerGraphics.Objects
             float denom = -(normal * direction);
 
             if (denom < 0)
-            {
                 throw new ArgumentException("No interception there");
-            }
 
             Vector k = center - start;
             var t = -(k * normal) / denom;
@@ -47,6 +45,7 @@ namespace ComputerGraphics.Objects
             var x = start.X + t * direction.X;
             var y = start.Y + t * direction.Y;
             var z = start.Z + t * direction.Z;
+
             return new Point(x, y, z);
         }
 

@@ -118,7 +118,7 @@ namespace Tests
             objects.Add(plane);
             Vector light = new Vector(0.5, 0.5, 0.7);
 
-            var resDistance = Scene.theNearest(light, objects, new Point(0, 0, -10), out IObject resObj, out Point resIntercept);
+            var resDistance = Scene.TheNearest(light, objects, new Point(0, 0, -10), out IObject resObj, out Point resIntercept);
             Assert.Equal(plane, resObj);
         }
 

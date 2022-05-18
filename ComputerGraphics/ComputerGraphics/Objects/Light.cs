@@ -7,21 +7,16 @@ namespace ComputerGraphics.Objects
 {
     public class Light
     {
-        private Vector vector;
-
         public Light(Vector vector)
         {
-            this.vector = Vector.Normilize(vector);
+            this.Vector = Vector.Normilize(vector);
         }
 
-        public Vector Vector
-        {
-            get { return vector; }
-        }
+        public Vector Vector { get; private set; }
 
-        public void setLight(Vector newVector)
+        public void SetLight(Vector newVector)
         {
-            vector = Vector.Normilize(newVector);
+            Vector = Vector.Normilize(newVector);
         }
     }
 }

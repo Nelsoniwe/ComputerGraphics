@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Channels;
 using ComputerGraphics.Scene;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 
 namespace ComputerGraphics
@@ -19,18 +20,23 @@ namespace ComputerGraphics
             //int width = 1280;
             //int height = 720;
 
-            int width = 500;
-            int height = 500;
+            int width = 1280;
+            int height = 720;
 
-            Camera camera = new Camera(new Point(2, 0, -450), new Vector(0, 0, 1), height, width);
+            Camera camera = new Camera(new Point(0, 0, -1), new Vector(0, 0, 1), height, width);
             Scene.Scene scene = new Scene.Scene(camera);
+
             //Sphere sphere = new Sphere(new Point(4, -2, 100), 4);
             //scene.AddObject(sphere);
+
+            //Sphere sphere4 = new Sphere(new Point(0, 5, 0), 1);
+            //scene.AddObject(sphere4);
+
             //Sphere sphere2 = new Sphere(new Point(2, 2, 10), 2);
             //scene.AddObject(sphere2);
             //Sphere sphere3 = new Sphere(new Point(4, -2, 8), 2);
             //scene.AddObject(sphere3);
-            
+
             Light light = new Light(new Vector(-1, 1, 1));
             scene.AddLight(light);
 
@@ -39,9 +45,10 @@ namespace ComputerGraphics
 
             //scene.AddObject(triangle);
 
-            Plane plane = new Plane(new Point(-200, 1, 1), new Vector(1, 0, 0));
-            scene.AddObject(plane);
-            string source = @"C:\Users\lenovo\Downloads\Telegram Desktop\task.obj";
+            //Plane plane = new Plane(new Point(-200, 1, 1), new Vector(1, 0, 0));
+            //scene.AddObject(plane);
+
+            string source = @"C:\Users\Denys\Desktop\cow.obj";
             List<Triangle> triangles = ReadObjectFile(source);
 
             for (int i = 0; i < triangles.Count; i++)
@@ -49,11 +56,14 @@ namespace ComputerGraphics
                 scene.AddObject(triangles[i]);
             }
 
-            double[,] screen = scene.getScreenArray();
+            Stopwatch s = new Stopwatch();
+            s.Start();
+            double[,] screen = scene.GetScreenArray(50);
+            s.Stop();
+            Console.WriteLine($"Render time: {s.ElapsedMilliseconds}");
 
-            Console.WriteLine("render done");
 
-            string filename = @"C:\Users\lenovo\OneDrive\Рабочий стол\compGraph\task.ppm"; //destination
+            string filename = @"C:\Users\Denys\Desktop\task.ppm"; //destination
             StreamWriter destination = new StreamWriter(filename);
             destination.Write("P3\n{0} {1} {2}\n", width, height, 255);
             destination.Flush();
@@ -81,17 +91,13 @@ namespace ComputerGraphics
                 }
                 destination.WriteLine(output);
                 output.Clear();
-
-                Console.SetCursorPosition(0, 0);
-                Console.Write(Convert.ToInt32(i));
-                Console.Write("/");
-                Console.Write(height);
+                
             }
 
             destination.Close();
-            Console.WriteLine("file created");
         }
 
+        //TODO LOGS TRY CATCH
         public static List<Triangle> ReadObjectFile(string path)
         {
             StreamReader sourceFile = new StreamReader(path);
@@ -134,8 +140,7 @@ namespace ComputerGraphics
                             points[pointCoord[2] - 1],
                             normals[vectorCoord[0] - 1],
                             normals[vectorCoord[1] - 1],
-                            normals[vectorCoord[2] - 1]
-                            ));
+                            normals[vectorCoord[2] - 1]));
                     }
 
                 }

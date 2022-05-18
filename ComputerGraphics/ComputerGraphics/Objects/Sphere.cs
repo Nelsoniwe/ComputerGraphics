@@ -50,6 +50,9 @@ namespace ComputerGraphics.Objects
             if (D < 0)
                 throw new ArgumentException("No interception there");
 
+            if (a == 0)
+                throw new ArgumentException(); //TODO
+
             var t = (-b - Math.Sqrt(D)) / (2 * a);
 
             if (t<0)
