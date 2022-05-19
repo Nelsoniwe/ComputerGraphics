@@ -106,9 +106,6 @@ namespace ComputerGraphics.Scene
                     height));
 
                 partPixelCounter += partPixelCount;
-
-                //if (i+1== taskCount && partPixelCounter + partPixelCount > height)
-                //    partPixelCount = height - partPixelCounter;
             }
 
             Task.WaitAll(tasks);
@@ -145,22 +142,39 @@ namespace ComputerGraphics.Scene
             double[,] partScreen = new double[height, endWidth - startWidth];
             int xIterator = 0;
             int yIterator = 0;
+
+            Vector right_vec = Vector.Normilize(Vector.Cross(camera.Direction, Vector.Normilize(new Vector(1, 0, 0))));
+            Vector up = Vector.Cross(camera.Direction, Vector.Negate(right_vec));
+
+            var w = camera.Direction;
+            var u = Vector.Cross(w, up);
+            var v = Vector.Cross(u, w);
+
+            //Uncoment to add fov
+            //var pixelHeight = 2 * Math.Tan(HorFov / 2) * 1 / height;
+            //var pixelWidth = 2 * Math.Tan(VertFov / 2) * 1 / width;
+
+            var pixelHeight = realPlaneHeight / height;
+            var pixelWidth = realPlaneWidht / width;
+
+            var scanlineStart = planeOrigin - (width / 2) * pixelWidth * u + startWidth*pixelWidth*u + (pixelWidth / 2) * u  +
+                (height / 2) * pixelHeight * v - (pixelHeight / 2) * v;
+            var scanlineStartPoint = new Point(scanlineStart.X,scanlineStart.Y,scanlineStart.Z);
+
+            var pixelWidthU = pixelWidth * u;
+            var pixelHeightV = pixelHeight * v;
+
             for (int x = 0; x < height; x++)
             {
                 yIterator = 0;
+                var pixelCenter = new Point(scanlineStartPoint.X, scanlineStartPoint.Y, scanlineStartPoint.Z);
+
                 //var pixelCenter = planePoz;
                 for (int y = startWidth; y < endWidth; y++)
                 {
-                    var xNorm = -(x - width / 2) / (double)width;
-                    var yNorm = (y - height / 2) / (double)height;
 
-                    var xOnPlane = xNorm * realPlaneWidht / 2;
-                    var yOnPlane = yNorm * realPlaneHeight / 2;
+                    var ray = pixelCenter - camera.Position ;
 
-                    Vector positionOnPlane = planeOrigin + new Vector(xOnPlane, yOnPlane, 0);
-
-                    //трасувальний промінь
-                    Vector ray = positionOnPlane - new Vector(camera.Position.X, camera.Position.Y, camera.Position.Z);
                     double minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);
                     if (nearestIntercept != null)
                     {
@@ -186,8 +200,9 @@ namespace ComputerGraphics.Scene
                     }
 
                     yIterator++;
-
+                    pixelCenter = new Point(pixelCenter.X + pixelWidthU.X, pixelCenter.Y + pixelWidthU.Y, +pixelCenter.Z + pixelWidthU.Z);
                 }
+                scanlineStartPoint = new Point(scanlineStartPoint.X - pixelHeightV.X, scanlineStartPoint.Y - pixelHeightV.Y, +scanlineStartPoint.Z - pixelHeightV.Z);
             }
             return partScreen;
         }

@@ -20,24 +20,27 @@ namespace ComputerGraphics
             //int width = 1280;
             //int height = 720;
 
-            int width = 1280;
-            int height = 720;
+            int width = 500;
+            int height = 500;
 
-            Camera camera = new Camera(new Point(0, 0, 0), new Vector(0, 0, 1), height, width);
+            Camera camera = new Camera(new Point(0, -1, 0), new Vector(0, 1, 0), height, width);
             Scene.Scene scene = new Scene.Scene(camera);
 
-            Sphere sphere = new Sphere(new Point(4, -2, 100), 4);
-            scene.AddObject(sphere);
+            //Sphere sphere = new Sphere(new Point(4, -2, 100), 4);
+            //scene.AddObject(sphere);
 
-            Sphere sphere4 = new Sphere(new Point(5, 0, 0), 1);
-            scene.AddObject(sphere4);
-            Sphere sphere5 = new Sphere(new Point(0, -5, 0), 1);
-            scene.AddObject(sphere5);
+            //Sphere sphere4 = new Sphere(new Point(5, 0, 0), 1);
+            //scene.AddObject(sphere4);
+            //Sphere sphere5 = new Sphere(new Point(0, 5, 0), 1);
+            //scene.AddObject(sphere5);
 
-            Sphere sphere2 = new Sphere(new Point(2, 2, 10), 2);
-            scene.AddObject(sphere2);
-            Sphere sphere3 = new Sphere(new Point(4, -2, 8), 2);
-            scene.AddObject(sphere3);
+            //Sphere sphere6 = new Sphere(new Point(0, 0, -20), 1);
+            //scene.AddObject(sphere6);
+
+            //Sphere sphere2 = new Sphere(new Point(2, 2, 10), 2);
+            //scene.AddObject(sphere2);
+            //Sphere sphere3 = new Sphere(new Point(4, -2, 8), 2);
+            //scene.AddObject(sphere3);
 
             Light light = new Light(new Vector(-1, 1, 1));
             scene.AddLight(light);
@@ -47,16 +50,16 @@ namespace ComputerGraphics
 
             //scene.AddObject(triangle);
 
-            Plane plane = new Plane(new Point(-200, 1, 1), new Vector(1, 0, 0));
-            scene.AddObject(plane);
+            //Plane plane = new Plane(new Point(-200, 1, 1), new Vector(1, 0, 0));
+            //scene.AddObject(plane);
 
             string source = @"C:\Users\Denys\Desktop\cow.obj";
-            //List<Triangle> triangles = ReadObjectFile(source);
+            List<Triangle> triangles = ReadObjectFile(source);
 
-            //for (int i = 0; i < triangles.Count; i++)
-            //{
-            //    scene.AddObject(triangles[i]);
-            //}
+            for (int i = 0; i < triangles.Count; i++)
+            {
+                scene.AddObject(triangles[i]);
+            }
 
             Stopwatch s = new Stopwatch();
             s.Start();

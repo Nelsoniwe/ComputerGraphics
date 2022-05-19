@@ -46,6 +46,8 @@ namespace ComputerGraphics.Types
             return new Vector(pointOne.X - pointTwo.X, pointOne.Y - pointTwo.Y, pointOne.Z - pointTwo.Z);
         }
 
+      
+
         public static double Distance(Point pointOne, Point pointTwo)
         {
             double deltaX = pointTwo.X - pointOne.X;
