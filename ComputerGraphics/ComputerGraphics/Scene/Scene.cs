@@ -63,10 +63,10 @@ namespace ComputerGraphics.Scene
             double fov = 60;
             Vector planeOrigin = cameraPos + Vector.Normilize(camera.Direction);
 
-            int width = screen.GetUpperBound(0)+1; //width
-            int height = screen.GetUpperBound(1)+1; //height 
-
-            var aspectRatio = height / width;
+            int width = screen.GetUpperBound(1)+1; //width
+            int height = screen.GetUpperBound(0)+1; //height 
+            
+            var aspectRatio = (float)width / height;
 
             float distanceToPlaneFromCamera = 1;
             var fovInRad = fov / 180f * Math.PI;
@@ -75,7 +75,7 @@ namespace ComputerGraphics.Scene
 
             int partPixelCount = height / taskCount;
 
-            if (height % taskCount > 0)
+            if (width % taskCount > 0)
             {
                 taskCount++;
             }
@@ -88,7 +88,7 @@ namespace ComputerGraphics.Scene
             {
                 if (i + 1 == taskCount)
                 {
-                    partPixelCount = height - partPixelCounter;
+                    partPixelCount = width - partPixelCounter;
                 }
 
                 int j = i;
@@ -136,22 +136,22 @@ namespace ComputerGraphics.Scene
             Vector planeOrigin,
             double realPlaneWidht,
             double realPlaneHeight,
-            int aspectRatio, 
-            int startWidth, 
+            float aspectRatio,
+            int startWidth,
             int endWidth,
             int width,
             int height)
         {
-            double[,] partScreen = new double[ width, endWidth - startWidth];
+            double[,] partScreen = new double[height, endWidth - startWidth];
             int xIterator = 0;
             int yIterator = 0;
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < height; x++)
             {
                 yIterator = 0;
                 //var pixelCenter = planePoz;
                 for (int y = startWidth; y < endWidth; y++)
                 {
-                    var xNorm = -(x - width / 2) / (double)width * aspectRatio;
+                    var xNorm = -(x - width / 2) / (double)width;
                     var yNorm = (y - height / 2) / (double)height;
 
                     var xOnPlane = xNorm * realPlaneWidht / 2;
@@ -192,74 +192,6 @@ namespace ComputerGraphics.Scene
             return partScreen;
         }
 
-        //public double[,] getScreenArray()
-        //{
-        //    camera.RefreshScreen();
-
-        //    var screen = camera.Screen;
-        //    var cameraPos = camera.Position;
-
-        //    double fov = 60;
-        //    Vector planeOrigin = cameraPos + Vector.Normilize(camera.Direction);
-
-        //    int width = screen.GetUpperBound(0); //width
-        //    int height = screen.GetUpperBound(1); //height 
-
-        //    var aspectRatio = height / width;
-        //    var pixelRatio = (24 / 11);
-
-        //    for (int x = 0; x < width; x++)
-        //    {
-        //        //var pixelCenter = planePoz;
-        //        for (int y = 0; y < height; y++)
-        //        {
-
-        //            var xNorm = -(x - width / 2) / (double)width * aspectRatio;
-        //            var yNorm = (y - height / 2) / (double)height;
-        //            float distanceToPlaneFromCamera = 1;
-        //            var fovInRad = fov / 180f * Math.PI;
-        //            double realPlaneHeight = (distanceToPlaneFromCamera * Math.Tan(fovInRad));
-        //            double realPlaneWidht = realPlaneHeight / height * width ;
-
-        //            var xOnPlane = xNorm * realPlaneWidht / 2;
-        //            var yOnPlane = yNorm * realPlaneHeight / 2;
-
-        //            Vector positionOnPlane = planeOrigin + new Vector(xOnPlane, yOnPlane, 0);
-
-        //            //трасувальний промінь
-        //            Vector ray = positionOnPlane - new Vector(cameraPos.X,cameraPos.Y,cameraPos.Z);
-        //            double minDistance = TheNearest(ray, Objects, cameraPos, out IObject nearestObj, out Point nearestIntercept);
-        //            if (nearestIntercept != null)
-        //            {
-        //                double minNumber = 0;
-        //                if (light != null)
-        //                {
-        //                    Vector shadowVector = Vector.Negate(light.Vector);
-        //                    bool isShadow = false;
-
-        //                    //foreach (var obj in Objects)
-        //                    //{
-        //                    //    if (obj.IsIntersection(nearestIntercept, shadowVector))
-        //                    //        isShadow = true;
-        //                    //}
-
-        //                    minNumber = -(light.Vector * Vector.Normilize(nearestObj.GetNormal(nearestIntercept)));
-        //                    if (isShadow)
-        //                        minNumber /= 2;
-        //                }
-        //                else
-        //                    minNumber = 0;
-        //                screen[x, y] = minNumber;
-        //            }
-
-
-        //        }
-        //        Console.SetCursorPosition(0, 0);
-        //        Console.Write($"{x}/{width}");
-        //    }
-
-        //    return screen;
-        //}
 
     }
 }

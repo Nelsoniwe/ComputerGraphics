@@ -9,11 +9,11 @@ namespace ComputerGraphics.Scene
         private Vector direction;
         private double[,] screen;
 
-        public Camera(Point position,Vector direction, int xRes, int yRes)
+        public Camera(Point position,Vector direction, int height, int weight)
         {
             this.position = position;
             this.direction = Vector.Normilize(direction);
-            screen = new double[xRes, yRes];
+            screen = new double[height, weight];
         }
 
         public void RefreshScreen()
