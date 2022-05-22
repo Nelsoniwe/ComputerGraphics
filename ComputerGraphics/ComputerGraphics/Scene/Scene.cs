@@ -25,14 +25,22 @@ namespace ComputerGraphics.Scene
             Objects.Add(addObject);
         }
 
+        public void AddObjects(List<IObject> objectsCollection)
+        {
+            for (int i = 0; i < objectsCollection.Count; i++)
+            {
+                Objects.Add(objectsCollection[i]);
+            }
+        }
+
         public void AddLight(Light light)
         {
             this.light = light;
         }
 
-        public static double TheNearest(Vector vector, List<IObject> objects, Point camera, out IObject obj, out Point intercept)
+        public static float TheNearest(Vector vector, List<IObject> objects, Point camera, out IObject obj, out Point intercept)
         {
-            double minDistance = Int32.MaxValue;
+            float minDistance = Int32.MaxValue;
             obj = null;
             intercept = null;
             for (int i = 0; i < objects.Count; i++)
@@ -40,7 +48,7 @@ namespace ComputerGraphics.Scene
                 if (objects[i].IsIntersection(camera, vector))
                 {
                     Point tempIntercept = objects[i].WhereIntercept(camera, vector);
-                    double distance = Point.Distance(tempIntercept, camera);
+                    float distance = Point.Distance(tempIntercept, camera);
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -53,14 +61,14 @@ namespace ComputerGraphics.Scene
             return minDistance;
         }
 
-        public double[,] GetScreenArray(int taskCount)
+        public float[,] GetScreenArray(int taskCount)
         {
             camera.RefreshScreen();
 
             var screen = camera.Screen;
             var cameraPos = camera.Position;
 
-            double fov = 60;
+            float fov = 60;
             Vector planeOrigin = cameraPos + Vector.Normilize(camera.Direction);
 
             int width = screen.GetUpperBound(1)+1; //width
@@ -70,8 +78,8 @@ namespace ComputerGraphics.Scene
 
             float distanceToPlaneFromCamera = 1;
             var fovInRad = fov / 180f * Math.PI;
-            double realPlaneHeight = (distanceToPlaneFromCamera * Math.Tan(fovInRad));
-            double realPlaneWidht = realPlaneHeight / height * width;
+            float realPlaneHeight = (float)(distanceToPlaneFromCamera * Math.Tan(fovInRad));
+            float realPlaneWidht = realPlaneHeight / height * width;
 
             int partPixelCount = height / taskCount;
 
@@ -113,7 +121,7 @@ namespace ComputerGraphics.Scene
             int partCoordinatesCounter = 0;
             for (int i = 0; i < taskCount; i++)
             {
-                var part = ((Task<double[,]>)tasks[i]).Result;
+                var part = ((Task<float[,]>)tasks[i]).Result;
 
                 for (int l = 0; l < part.GetUpperBound(1)+1; l++)
                 {
@@ -129,17 +137,17 @@ namespace ComputerGraphics.Scene
             return screen;
         }
 
-        public double[,] GetPartScreenArray(
+        public float[,] GetPartScreenArray(
             Vector planeOrigin,
-            double realPlaneWidht,
-            double realPlaneHeight,
+            float realPlaneWidht,
+            float realPlaneHeight,
             float aspectRatio,
             int startWidth,
             int endWidth,
             int width,
             int height)
         {
-            double[,] partScreen = new double[height, endWidth - startWidth];
+            float[,] partScreen = new float[height, endWidth - startWidth];
             int xIterator = 0;
             int yIterator = 0;
 
@@ -175,10 +183,10 @@ namespace ComputerGraphics.Scene
 
                     var ray = pixelCenter - camera.Position ;
 
-                    double minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);
+                    float minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);
                     if (nearestIntercept != null)
                     {
-                        double minNumber = 0;
+                        float minNumber = 0;
                         if (light != null)
                         {
                             Vector shadowVector = Vector.Negate(light.Vector);

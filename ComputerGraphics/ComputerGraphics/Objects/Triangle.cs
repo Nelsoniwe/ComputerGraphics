@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using ComputerGraphics.Interfaces;
 using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Objects
 {
-    public class Triangle : IObject
+    public class Triangle : IObject, ITransformation
     {
         private Point point1;
         private Point point2;
@@ -88,6 +89,56 @@ namespace ComputerGraphics.Objects
                     }
                 }
             }
+        }
+
+        public object RotateX(float degree)
+        {
+            point1.RotateX(degree);
+            point2.RotateX(degree);
+            point3.RotateX(degree);
+            vector1.RotateX(degree);
+            vector2.RotateX(degree);
+            vector3.RotateX(degree);
+            return this;
+        }
+
+        public object RotateY(float degree)
+        {
+            point1.RotateY(degree);
+            point2.RotateY(degree);
+            point3.RotateY(degree);
+            vector1.RotateY(degree);
+            vector2.RotateY(degree);
+            vector3.RotateY(degree);
+            return this;
+        }
+
+        public object RotateZ(float degree)
+        {
+            
+            point1.RotateZ(degree);
+            point2.RotateZ(degree);
+            point3.RotateZ(degree);
+            vector1.RotateZ(degree);
+            vector2.RotateZ(degree);
+            vector3.RotateZ(degree);
+            return this;
+        }
+
+        public object Scale(float kx, float ky, float kz)
+        {
+            point1.Scale(kx, ky, kz);
+            point2.Scale(kx, ky, kz);
+            point3.Scale(kx, ky, kz);
+            return this;
+        }
+
+        public object Translate(Vector direction)
+        {
+            point1.Translate(direction);
+            point2.Translate(direction);
+            point3.Translate(direction);
+            return this;
         }
 
         public Point WhereIntercept(Point start, Vector direction)

@@ -14,7 +14,7 @@ namespace Tests
         #region Types
         [Theory]
         [ClassData(typeof(PointsTestData))]
-        public void DistanceBetweenPointsIsRight(Point point1, Point point2, double expected)
+        public void DistanceBetweenPointsIsRight(Point point1, Point point2, float expected)
         {
             var result = Point.Distance(point1, point2);
             Assert.Equal(expected, result);
@@ -116,7 +116,7 @@ namespace Tests
             objects.Add(sphere);
             objects.Add(sphere2);
             objects.Add(plane);
-            Vector light = new Vector(0.5, 0.5, 0.7);
+            Vector light = new Vector(0.5f, 0.5f, 0.7f);
 
             var resDistance = Scene.TheNearest(light, objects, new Point(0, 0, -10), out IObject resObj, out Point resIntercept);
             Assert.Equal(plane, resObj);
@@ -190,9 +190,9 @@ namespace Tests
     {
         public IEnumerator<object[]> GetEnumerator()
         {
-            yield return new object[] { new Point(-0.1, 1.8, 1), new Vector(-0.8, 0.5, 0.1), true };
+            yield return new object[] { new Point(-0.1f, 1.8f, 1), new Vector(-0.8f, 0.5f, 0.1f), true };
             yield return new object[] { new Point(1, 0, 1), new Vector(-1, 1, 1), false };
-            yield return new object[] { new Point(1, 1, -10), new Vector(0.5, -0.5, 0.7), false };
+            yield return new object[] { new Point(1, 1, -10), new Vector(0.5f, -0.5f, 0.7f), false };
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -202,8 +202,8 @@ namespace Tests
     {
         public IEnumerator<object[]> GetEnumerator()
         {
-            yield return new object[] { new Point(-0.1, 1.8, 1), new Vector(-0.8, 0.5, 0.1), new Point(-5.04, 4.89, 1.62) };
-            yield return new object[] { new Point(1, 1, -10), new Vector(-0.5, 0.25, 0.8), new Point(-5.67, 4.33, 0.67) };
+            yield return new object[] { new Point(-0.1f, 1.8f, 1), new Vector(-0.8f, 0.5f, 0.1f), new Point(-5.04f, 4.89f, 1.62f) };
+            yield return new object[] { new Point(1, 1, -10), new Vector(-0.5f, 0.25f, 0.8f), new Point(-5.67f, 4.33f, 0.67f) };
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using ComputerGraphics.Interfaces;
 using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Objects
 {
-    public class Plane : IObject
+    public class Plane : IObject, ITransformation
     {
         private Point center;
         private Vector normal;
@@ -52,6 +53,42 @@ namespace ComputerGraphics.Objects
         public Vector GetNormal(Point point)
         {
             return normal;
+        }
+
+        public object RotateX(float degree)
+        {
+            degree = (float)(degree * Math.PI / 180.0);
+            center.RotateX(degree);
+            normal.RotateX(degree);
+            return this;
+        }
+
+        public object RotateY(float degree)
+        {
+            degree = (float)(degree * Math.PI / 180.0);
+            center.RotateY(degree);
+            normal.RotateY(degree);
+            return this;
+        }
+
+        public object RotateZ(float degree)
+        {
+            degree = (float)(degree * Math.PI / 180.0);
+            center.RotateZ(degree);
+            normal.RotateZ(degree);
+            return this;
+        }
+
+        public object Scale(float kx, float ky, float kz)
+        {
+            return this;
+        }
+
+        public object Translate(Vector direction)
+        {
+            center.Translate(direction);
+            normal.Translate(direction);
+            return this;
         }
     }
 }

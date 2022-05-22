@@ -58,15 +58,42 @@ namespace ComputerGraphics.Objects
             if (t<0)
                 throw new ArgumentException("No interception there");
 
-            var x = start.X + t * direction.X;
-            var y = start.Y + t * direction.Y;
-            var z = start.Z + t * direction.Z;
+            var x = (float)(start.X + t * direction.X);
+            var y = (float)(start.Y + t * direction.Y);
+            var z = (float)(start.Z + t * direction.Z);
             return new Point(x, y, z);
         }
 
         public Vector GetNormal(Point point)
         {
             return Vector.GetVectorWithPoints(center,point);
+        }
+
+        public object Translate(Vector direction)
+        {
+            center = (Point)center.Translate(direction);
+            return this;
+        }
+
+        public object RotateX(float degree)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object RotateY(float degree)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object RotateZ(float degree)
+        {
+            throw new NotImplementedException();
+        }
+
+        public object Scale(float kx, float ky, float kz)
+        {
+            radius = kx;
+            return this;
         }
     }
 }

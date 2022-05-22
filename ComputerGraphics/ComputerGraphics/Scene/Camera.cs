@@ -7,13 +7,13 @@ namespace ComputerGraphics.Scene
     {
         private Point position;
         private Vector direction;
-        private double[,] screen;
+        private float [,] screen;
 
         public Camera(Point position,Vector direction, int height, int weight)
         {
             this.position = position;
             this.direction = Vector.Normilize(direction);
-            screen = new double[height, weight];
+            screen = new float[height, weight];
         }
 
         public void RefreshScreen()
@@ -21,7 +21,7 @@ namespace ComputerGraphics.Scene
             Array.Clear(screen, 0, screen.Length);
         }
 
-        public double[,] Screen
+        public float[,] Screen
         {
             get
             {
