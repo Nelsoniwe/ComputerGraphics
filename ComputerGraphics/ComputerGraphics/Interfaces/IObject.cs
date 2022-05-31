@@ -11,6 +11,7 @@ namespace ComputerGraphics.Interfaces
 
         public Vector GetNormal(Point point);
 
-        
+        public Point getCoordsofMin();
+        public Point getCoordsofMax();
     }
 }

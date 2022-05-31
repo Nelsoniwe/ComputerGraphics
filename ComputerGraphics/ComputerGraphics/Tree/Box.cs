@@ -6,23 +6,37 @@ using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Tree
 {
-    class Box : IObject
+    class Box
     {
-        private List<IObject> objects;
+        private List<Box> boxes = new List<Box>();
+        private List<IObject> objects = new List<IObject>();
 
-        private float minX;
-        private float minZ;
-        private float minY;
+        public Point min;
+        public Point max;
 
-        private float maxX;
-        private float maxZ;
-        private float maxY;
-
-        public Box(List<IObject> objects)
+        public Box(Point min, Point max)
         {
+            this.min = min;
+            this.max = max;
+        }
+
+        public Box(Point min, Point max,List<IObject> objects)
+        {
+            this.min = min;
+            this.max = max;
             this.objects = objects;
+        }
 
+        public Box(Point min, Point max, List<Box> boxes)
+        {
+            this.min = min;
+            this.max = max;
+            this.boxes = boxes;
+        }
 
+        public int getBoxesCount()
+        {
+            return boxes.Count;
         }
 
         public int getobjectsCount()
@@ -30,19 +44,43 @@ namespace ComputerGraphics.Tree
             return objects.Count;
         }
 
-        public Vector GetNormal(Point point)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsIntersection(Point start, Vector direction)
         {
-            throw new NotImplementedException();
+            var invDirection = new Vector(1 / direction.X, 1 / direction.Y, 1 / direction.Z);
+            direction = invDirection;
+
+            float t1 = (min.X - start.X) * direction.X;
+            float t2 = (max.X - start.X) * direction.X;
+            float t3 = (min.Y - start.Y) * direction.Y;
+            float t4 = (max.Y - start.Y) * direction.Y;
+            float t5 = (min.Z - start.Z) * direction.Z;
+            float t6 = (max.Z - start.Z) * direction.Z;
+
+            float tmin = Math.Max(Math.Max(Math.Min(t1, t2), Math.Min(t3, t4)), Math.Min(t5, t6));
+            float tmax = Math.Min(Math.Min(Math.Max(t1, t2), Math.Max(t3, t4)), Math.Max(t5, t6));
+
+            float t;
+            if (tmax < 0)
+            {
+                t = tmax;
+                return false;
+            }
+
+            // if tmin > tmax, ray doesn't intersect AABB
+            if (tmin > tmax)
+            {
+                t = tmax;
+                return false;
+            }
+
+            t = tmin;
+            return true;
         }
 
-        public Point WhereIntercept(Point start, Vector direction)
+        //TODO
+        public void DivideBoxes()
         {
-            throw new NotImplementedException();
+
         }
     }
 }

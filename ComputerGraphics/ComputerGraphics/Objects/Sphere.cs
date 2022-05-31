@@ -95,5 +95,15 @@ namespace ComputerGraphics.Objects
             radius = kx;
             return this;
         }
+
+        public Point getCoordsofMin()
+        {
+            return new Point(center.X-radius, center.Y-radius, center.Z+radius);
+        }
+
+        public Point getCoordsofMax()
+        {
+            return new Point(center.X + radius, center.Y + radius, center.Z - radius);
+        }
     }
 }

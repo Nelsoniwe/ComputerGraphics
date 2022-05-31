@@ -28,6 +28,46 @@ namespace ComputerGraphics.Objects
             this.vector3 = vector3;
         }
 
+        public Point getCoordsofMax()
+        {
+            float maxX = point1.X;
+            float maxY = point1.Y;
+            float maxZ = point1.Z;
+            Point[] points = { point2, point3 };
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (points[i].X > maxX)
+                    maxX = points[i].X;
+                if (points[i].Y > maxY)
+                    maxY = points[i].Y;
+                if (points[i].Z > maxZ)
+                    maxZ = points[i].Z;
+            }
+
+            return new Point(maxX, maxY, maxZ);
+        }
+
+        public Point getCoordsofMin()
+        {
+            float minX = point1.X;
+            float minY = point1.Y;
+            float minZ = point1.Z;
+            Point[] points = {point2,point3};
+
+            for (int i = 0; i < 2; i++)
+            {
+                if (points[i].X < minX)
+                    minX = points[i].X;
+                if (points[i].Y < minY)
+                    minY = points[i].Y;
+                if (points[i].Z < minZ)
+                    minZ = points[i].Z;
+            }
+
+            return new Point(minX, minY, minZ);
+        }
+
         public Vector GetNormal(Point point)
         {
 

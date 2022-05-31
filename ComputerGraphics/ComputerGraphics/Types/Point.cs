@@ -22,14 +22,18 @@ namespace ComputerGraphics.Types
         public float X
         {
             get { return this.x; }
+            set { x = value; }
         }
+
         public float Y
         {
             get { return this.y; }
+            set { y = value; }
         }
         public float Z
         {
             get { return this.z; }
+            set { z = value; }
         }
 
         public static Vector operator +(Point point, Vector vector)

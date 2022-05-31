@@ -90,5 +90,15 @@ namespace ComputerGraphics.Objects
             normal.Translate(direction);
             return this;
         }
+
+        public Point getCoordsofMin()
+        {
+            return center;
+        }
+
+        public Point getCoordsofMax()
+        {
+            return center;
+        }
     }
 }
