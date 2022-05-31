@@ -172,7 +172,6 @@ namespace ComputerGraphics.Scene
                 //var pixelCenter = planePoz;
                 for (int y = startWidth; y < endWidth; y++)
                 {
-
                     var ray = pixelCenter - camera.Position ;
 
                     double minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);

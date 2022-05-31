@@ -63,7 +63,7 @@ namespace ComputerGraphics
 
             Stopwatch s = new Stopwatch();
             s.Start();
-            double[,] screen = scene.GetScreenArray(50);
+            double[,] screen = scene.GetScreenArray(width/12);
             s.Stop();
             Console.WriteLine($"Render time: {s.ElapsedMilliseconds}");
 
