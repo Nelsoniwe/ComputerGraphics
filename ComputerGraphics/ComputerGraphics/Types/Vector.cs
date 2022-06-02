@@ -1,7 +1,5 @@
 ﻿using ComputerGraphics.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ComputerGraphics.Types
 {

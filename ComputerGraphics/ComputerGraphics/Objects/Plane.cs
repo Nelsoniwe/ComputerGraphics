@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Tree;
 using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Objects
@@ -99,6 +100,11 @@ namespace ComputerGraphics.Objects
         public Point getCoordsofMax()
         {
             return center;
+        }
+
+        public bool IsInBox(Box box)
+        {
+            return true;
         }
     }
 }

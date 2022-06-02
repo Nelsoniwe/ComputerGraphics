@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Tree;
 using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Objects
@@ -90,6 +91,16 @@ namespace ComputerGraphics.Objects
             var e2 = point3 - point1;
             var a = Vector.Normilize(Vector.Cross(e1, e2));
             return a;
+        }
+
+        public bool IsInBox(Box box)
+        {
+            Point min = getCoordsofMin();
+            Point max = getCoordsofMax();
+
+            return (min.X <= box.max.X && max.X >= box.min.X) &&
+                   (min.Y <= box.max.Y && max.Y >= box.min.Y) &&
+                   (min.Z <= box.max.Z && max.Z >= box.min.Z);
         }
 
         public bool IsIntersection(Point start, Vector direction)

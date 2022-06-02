@@ -6,10 +6,10 @@ using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Tree
 {
-    class Box
+    public class Box
     {
-        private List<Box> boxes = new List<Box>();
-        private List<IObject> objects = new List<IObject>();
+        public List<Box> boxes = new List<Box>();
+        public List<IObject> objects = new List<IObject>();
 
         public Point min;
         public Point max;
@@ -20,7 +20,7 @@ namespace ComputerGraphics.Tree
             this.max = max;
         }
 
-        public Box(Point min, Point max,List<IObject> objects)
+        public Box(Point min, Point max, List<IObject> objects)
         {
             this.min = min;
             this.max = max;
@@ -66,7 +66,6 @@ namespace ComputerGraphics.Tree
                 return false;
             }
 
-            // if tmin > tmax, ray doesn't intersect AABB
             if (tmin > tmax)
             {
                 t = tmax;
@@ -77,10 +76,46 @@ namespace ComputerGraphics.Tree
             return true;
         }
 
-        //TODO
         public void DivideBoxes()
         {
+            Box b1 = new Box(new Point(min.X, min.Y, min.Z), new Point((min.X + max.X) / 2f, (min.Y + max.Y) / 2f, (min.Z + max.Z) / 2f));
+            Box b2 = new Box(new Point(min.X, (min.Y + max.Y) / 2f, min.Z), new Point((min.X + max.X) / 2f, max.Y, (min.Z + max.Z) / 2f));
+            Box b3 = new Box(new Point(min.X, (min.Y + max.Y) / 2f, (min.Z + max.Z) / 2f), new Point((min.X + max.X) / 2f, max.Y, max.Z));
+            Box b4 = new Box(new Point(min.X, min.Y, (min.Z + max.Z) / 2f), new Point((min.X + max.X) / 2f, (min.Y + max.Y) / 2f, max.Z));
 
+            Box b5 = new Box(new Point((min.X + max.X) / 2f, min.Y, min.Z), new Point(max.X, (min.Y + max.Y) / 2f, (min.Z + max.Z) / 2f));
+            Box b6 = new Box(new Point((min.X + max.X) / 2f, (min.Y + max.Y) / 2f, min.Z), new Point(max.X, max.Y, (min.Z + max.Z) / 2f));
+            Box b7 = new Box(new Point((min.X + max.X) / 2f, (min.Y + max.Y) / 2f, (min.Z + max.Z) / 2f), new Point(max.X, max.Y, max.Z));
+            Box b8 = new Box(new Point((min.X + max.X) / 2f, min.Y, (min.Z + max.Z) / 2f), new Point(max.X, (min.Y + max.Y) / 2f, max.Z));
+
+            List<Box> tempBoxesList = new List<Box>() { b1, b2, b3, b4, b5, b6, b7, b8 };
+            foreach (var obj in objects)
+            {
+                foreach (var box in tempBoxesList)
+                {
+                    if (obj.IsInBox(box))
+                    {
+                        box.objects.Add(obj);
+                    }
+                }
+            }
+
+            foreach (var box in tempBoxesList)
+            {
+                if (box.objects.Count > 0)
+                {
+                    boxes.Add(box);
+                }
+            }
+
+            foreach (var box in boxes)
+            {
+                if (!(box.objects.Count < 20 || box.objects.Count >= objects.Count))
+                {
+                    box.DivideBoxes();
+                }
+            }
+            objects.Clear();
         }
     }
 }

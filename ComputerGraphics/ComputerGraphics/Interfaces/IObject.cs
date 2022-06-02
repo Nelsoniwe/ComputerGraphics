@@ -1,5 +1,6 @@
 ﻿using ComputerGraphics.Types;
 using System.Collections.Generic;
+using ComputerGraphics.Tree;
 
 namespace ComputerGraphics.Interfaces
 {
@@ -13,5 +14,7 @@ namespace ComputerGraphics.Interfaces
 
         public Point getCoordsofMin();
         public Point getCoordsofMax();
+
+        public bool IsInBox(Box box);
     }
 }

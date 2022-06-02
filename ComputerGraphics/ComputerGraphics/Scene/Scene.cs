@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using ComputerGraphics.Interfaces;
 using ComputerGraphics.Objects;
 using ComputerGraphics.Types;
+using ComputerGraphics.Tree;
 
 namespace ComputerGraphics.Scene
 {
     public class Scene
     {
         private List<IObject> Objects = new List<IObject>();
+        private List<IObject> planes = new List<IObject>();
+        private Tree.Tree tree;
         private Camera camera;
         private Light light;
 
@@ -22,7 +25,17 @@ namespace ComputerGraphics.Scene
 
         public void AddObject(IObject addObject)
         {
-            Objects.Add(addObject);
+            if (addObject is Plane)
+                planes.Add(addObject);
+            else
+                Objects.Add(addObject);
+
+        }
+
+        public void MakeTree()
+        {
+            List<IObject> copy = new List<IObject>(Objects);
+            tree = new Tree.Tree(copy);
         }
 
         public void AddObjects(List<IObject> objectsCollection)
@@ -55,7 +68,32 @@ namespace ComputerGraphics.Scene
                         obj = objects[i];
                         intercept = tempIntercept;
                     }
+                }
+            }
+            return minDistance;
+        }
 
+        public static float TheNearestTree(Vector vector, Tree.Tree tree, Point camera, out IObject obj, out Point intercept)
+        {
+            float minDistance = Int32.MaxValue;
+            obj = null;
+            intercept = null;
+            List<IObject> objects = tree.GetInterceptionObject(camera, vector);
+
+            if (objects.Count ==0)
+            {
+                return Int32.MaxValue;
+            }
+            for (int i = 0; i < objects.Count; i++)
+            {
+                Point tempIntercept = objects[i].WhereIntercept(camera, vector);
+
+                float distance = Point.Distance(tempIntercept, camera);
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    obj = objects[i];
+                    intercept = tempIntercept;
                 }
             }
             return minDistance;
@@ -71,9 +109,9 @@ namespace ComputerGraphics.Scene
             float fov = 60;
             Vector planeOrigin = cameraPos + Vector.Normilize(camera.Direction);
 
-            int width = screen.GetUpperBound(1)+1; //width
-            int height = screen.GetUpperBound(0)+1; //height 
-            
+            int width = screen.GetUpperBound(1) + 1; //width
+            int height = screen.GetUpperBound(0) + 1; //height 
+
             var aspectRatio = (float)width / height;
 
             float distanceToPlaneFromCamera = 1;
@@ -90,7 +128,7 @@ namespace ComputerGraphics.Scene
 
             Task[] tasks = new Task[taskCount];
 
-            
+
             int partPixelCounter = 0;
             for (int i = 0; i < taskCount; i++)
             {
@@ -123,9 +161,9 @@ namespace ComputerGraphics.Scene
             {
                 var part = ((Task<float[,]>)tasks[i]).Result;
 
-                for (int l = 0; l < part.GetUpperBound(1)+1; l++)
+                for (int l = 0; l < part.GetUpperBound(1) + 1; l++)
                 {
-                    for (int j = 0; j < part.GetUpperBound(0)+1; j++)
+                    for (int j = 0; j < part.GetUpperBound(0) + 1; j++)
                     {
                         screen[j, partCoordinatesCounter] = part[j, l];
                     }
@@ -158,16 +196,12 @@ namespace ComputerGraphics.Scene
             var u = Vector.Cross(w, up);
             var v = Vector.Cross(u, w);
 
-            //Uncoment to add fov
-            //var pixelHeight = 2 * Math.Tan(HorFov / 2) * 1 / height;
-            //var pixelWidth = 2 * Math.Tan(VertFov / 2) * 1 / width;
-
             var pixelHeight = realPlaneHeight / height;
             var pixelWidth = realPlaneWidht / width;
 
-            var scanlineStart = planeOrigin - (width / 2) * pixelWidth * u + startWidth*pixelWidth*u + (pixelWidth / 2) * u  +
+            var scanlineStart = planeOrigin - (width / 2) * pixelWidth * u + startWidth * pixelWidth * u + (pixelWidth / 2) * u +
                 (height / 2) * pixelHeight * v - (pixelHeight / 2) * v;
-            var scanlineStartPoint = new Point(scanlineStart.X,scanlineStart.Y,scanlineStart.Z);
+            var scanlineStartPoint = new Point(scanlineStart.X, scanlineStart.Y, scanlineStart.Z);
 
             var pixelWidthU = pixelWidth * u;
             var pixelHeightV = pixelHeight * v;
@@ -180,9 +214,30 @@ namespace ComputerGraphics.Scene
                 //var pixelCenter = planePoz;
                 for (int y = startWidth; y < endWidth; y++)
                 {
-                    var ray = pixelCenter - camera.Position ;
+                    var ray = pixelCenter - camera.Position;
 
-                    float minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);
+                    float minDistance = TheNearestTree(ray, tree, camera.Position, out IObject nearestObj, out Point nearestIntercept);
+                    //float minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);
+
+                    if (planes.Count >= 1)
+                    {
+                        float planeDist = float.MaxValue;
+                        foreach (var item in planes)
+                        {
+                            if (item.IsIntersection(camera.Position, ray))
+                            {
+                                var planeIntercept = item.WhereIntercept(camera.Position, ray);
+                                planeDist = Point.Distance(planeIntercept, camera.Position);
+                                if (planeDist < minDistance)
+                                {
+                                    minDistance = planeDist;
+                                    nearestObj = item;
+                                    nearestIntercept = planeIntercept;
+                                }
+                            }
+                        }
+                    }
+
                     if (nearestIntercept != null)
                     {
                         float minNumber = 0;
@@ -190,6 +245,9 @@ namespace ComputerGraphics.Scene
                         {
                             Vector shadowVector = Vector.Negate(light.Vector);
                             bool isShadow = false;
+
+                            //if (tree.GetInterceptionObject(nearestIntercept, shadowVector).Count > 1)
+                            //    isShadow = true;
 
                             //foreach (var obj in Objects)
                             //{

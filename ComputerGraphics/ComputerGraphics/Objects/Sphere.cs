@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Tree;
 using ComputerGraphics.Types;
 
 namespace ComputerGraphics.Objects
@@ -77,17 +78,17 @@ namespace ComputerGraphics.Objects
 
         public object RotateX(float degree)
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         public object RotateY(float degree)
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         public object RotateZ(float degree)
         {
-            throw new NotImplementedException();
+            return this;
         }
 
         public object Scale(float kx, float ky, float kz)
@@ -98,12 +99,22 @@ namespace ComputerGraphics.Objects
 
         public Point getCoordsofMin()
         {
-            return new Point(center.X-radius, center.Y-radius, center.Z+radius);
+            return new Point(center.X-radius, center.Y-radius, center.Z-radius);
         }
 
         public Point getCoordsofMax()
         {
-            return new Point(center.X + radius, center.Y + radius, center.Z - radius);
+            return new Point(center.X + radius, center.Y + radius, center.Z + radius);
+        }
+
+        public bool IsInBox(Box box)
+        {
+            Point min = getCoordsofMin();
+            Point max = getCoordsofMax();
+
+            return (min.X <= box.max.X && max.X >= box.min.X) &&
+                   (min.Y <= box.max.Y && max.Y >= box.min.Y) &&
+                   (min.Z <= box.max.Z && max.Z >= box.min.Z);
         }
     }
 }
