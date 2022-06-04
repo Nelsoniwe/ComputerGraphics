@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Materials;
 using ComputerGraphics.Tree;
 using ComputerGraphics.Types;
 
@@ -11,10 +12,18 @@ namespace ComputerGraphics.Objects
         private Point center;
         private Vector normal;
 
+        public Color color { get; set; }
+
         public Plane(Point center, Vector vector)
         {
             this.center = center;
             this.normal = Vector.Normilize(vector);
+            color = new Color(255, 255, 255, 0);
+        }
+
+        public void SetColor(int r, int g, int b, int mirror)
+        {
+            color = new Color(r, g, b, mirror);
         }
 
         public bool IsIntersection(Point start, Vector direction)

@@ -1,4 +1,5 @@
 ﻿using ComputerGraphics.Interfaces;
+using ComputerGraphics.Materials;
 using ComputerGraphics.Types;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,20 @@ namespace ComputerGraphics.Objects
     {
         private List<IObject> objects;
 
+        public Color color { get; set; }
+
         public ObjectsInObject(List<IObject> objects)
         {
             this.objects = objects;
+            color = new Color(255, 255, 255, 0);
+        }
+
+        public void SetColor(int r, int g, int b, int mirror)
+        {
+            foreach(var obj in objects)
+            {
+                obj.color = new Color(r, g, b, mirror);
+            }
         }
 
         public object RotateX(float degree)

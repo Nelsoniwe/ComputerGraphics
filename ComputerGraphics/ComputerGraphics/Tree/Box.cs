@@ -110,7 +110,7 @@ namespace ComputerGraphics.Tree
 
             foreach (var box in boxes)
             {
-                if (!(box.objects.Count < 20 || box.objects.Count >= objects.Count))
+                if (!(box.objects.Count < 10 || box.objects.Count >= objects.Count))
                 {
                     box.DivideBoxes();
                 }

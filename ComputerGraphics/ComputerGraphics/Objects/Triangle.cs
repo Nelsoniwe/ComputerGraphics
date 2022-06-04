@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Materials;
 using ComputerGraphics.Tree;
 using ComputerGraphics.Types;
 
@@ -15,11 +16,14 @@ namespace ComputerGraphics.Objects
         private Vector vector2;
         private Vector vector3;
 
+        public Color color { get; set; }
+
         public Triangle(Point point1, Point point2, Point point3)
         {
             this.point1 = point1;
             this.point2 = point2;
             this.point3 = point3;
+            color = new Color(255, 255, 255, 0);
         }
 
         public Triangle(Point point1, Point point2, Point point3, Vector vector1, Vector vector2, Vector vector3) : this(point1, point2, point3)
@@ -27,6 +31,12 @@ namespace ComputerGraphics.Objects
             this.vector1 = vector1;
             this.vector2 = vector2;
             this.vector3 = vector3;
+            color = new Color(255, 255, 255, 0);
+        }
+
+        public void SetColor(int r, int g, int b, int mirror)
+        {
+            color = new Color(r, g, b, mirror);
         }
 
         public Point getCoordsofMax()

@@ -7,6 +7,7 @@ using ComputerGraphics.Interfaces;
 using ComputerGraphics.Objects;
 using ComputerGraphics.Types;
 using ComputerGraphics.Tree;
+using ComputerGraphics.Materials;
 
 namespace ComputerGraphics.Scene
 {
@@ -99,7 +100,7 @@ namespace ComputerGraphics.Scene
             return minDistance;
         }
 
-        public float[,] GetScreenArray(int taskCount)
+        public Color[,] GetScreenArray(int taskCount)
         {
             camera.RefreshScreen();
 
@@ -159,7 +160,7 @@ namespace ComputerGraphics.Scene
             int partCoordinatesCounter = 0;
             for (int i = 0; i < taskCount; i++)
             {
-                var part = ((Task<float[,]>)tasks[i]).Result;
+                var part = ((Task<Color[,]>)tasks[i]).Result;
 
                 for (int l = 0; l < part.GetUpperBound(1) + 1; l++)
                 {
@@ -175,7 +176,7 @@ namespace ComputerGraphics.Scene
             return screen;
         }
 
-        public float[,] GetPartScreenArray(
+        public Color[,] GetPartScreenArray(
             Vector planeOrigin,
             float realPlaneWidht,
             float realPlaneHeight,
@@ -185,8 +186,8 @@ namespace ComputerGraphics.Scene
             int width,
             int height)
         {
-            float[,] partScreen = new float[height, endWidth - startWidth];
-            int xIterator = 0;
+            Color[,] partScreen = new Color[height, endWidth - startWidth];
+            
             int yIterator = 0;
 
             Vector right_vec = Vector.Normilize(Vector.Cross(camera.Direction, Vector.Normilize(new Vector(1, 0, 0))));
@@ -219,6 +220,8 @@ namespace ComputerGraphics.Scene
                     float minDistance = TheNearestTree(ray, tree, camera.Position, out IObject nearestObj, out Point nearestIntercept);
                     //float minDistance = TheNearest(ray, Objects, camera.Position, out IObject nearestObj, out Point nearestIntercept);
 
+                    
+
                     if (planes.Count >= 1)
                     {
                         float planeDist = float.MaxValue;
@@ -231,11 +234,18 @@ namespace ComputerGraphics.Scene
                                 if (planeDist < minDistance)
                                 {
                                     minDistance = planeDist;
-                                    nearestObj = item;
+                                    nearestObj = item;  
                                     nearestIntercept = planeIntercept;
                                 }
                             }
                         }
+                    }
+
+                    Color newColor = new Color(0, 0, 0, 0);
+
+                    if (nearestObj != null && nearestObj.color.Mirroring > 0)
+                    {
+                        MirrorVector(ref nearestObj, ref nearestIntercept, camera.Position, ray, ref newColor, minDistance);
                     }
 
                     if (nearestIntercept != null)
@@ -246,8 +256,8 @@ namespace ComputerGraphics.Scene
                             Vector shadowVector = Vector.Negate(light.Vector);
                             bool isShadow = false;
 
-                            //if (tree.GetInterceptionObject(nearestIntercept, shadowVector).Count > 1)
-                            //    isShadow = true;
+                            if (tree.GetInterceptionObject(nearestIntercept, shadowVector).Count > 1)
+                                isShadow = true;
 
                             //foreach (var obj in Objects)
                             //{
@@ -261,15 +271,98 @@ namespace ComputerGraphics.Scene
                         }
                         else
                             minNumber = 0;
-                        partScreen[x, yIterator] = minNumber;
+                        if(newColor.Mirroring > 0)
+                            partScreen[x, yIterator] = newColor; 
+                        else
+                            partScreen[x, yIterator] = new Color(
+                            (int)(minNumber * nearestObj.color.R),
+                            (int)(minNumber * nearestObj.color.G),
+                            (int)(minNumber * nearestObj.color.B),
+                            nearestObj.color.Mirroring);
                     }
 
+                    if(partScreen[x, yIterator] == null)
+                    {
+                        partScreen[x, yIterator] = new Color(135, 206, 250, 0);
+                        if(newColor.Mirroring > 0)
+                            partScreen[x, yIterator] = new Color(
+                                newColor.R + (int)135 * (100 - newColor.Mirroring) / 100,
+                                newColor.G + (int)206 * (100 - newColor.Mirroring) / 100,
+                                newColor.B + (int)250 * (100 - newColor.Mirroring) / 100,
+                                newColor.Mirroring
+                                );
+                    }
+                        
+
                     yIterator++;
+                    
                     pixelCenter = new Point(pixelCenter.X + pixelWidthU.X, pixelCenter.Y + pixelWidthU.Y, +pixelCenter.Z + pixelWidthU.Z);
                 }
                 scanlineStartPoint = new Point(scanlineStartPoint.X - pixelHeightV.X, scanlineStartPoint.Y - pixelHeightV.Y, +scanlineStartPoint.Z - pixelHeightV.Z);
             }
             return partScreen;
+        }
+
+        public void MirrorVector(ref IObject obj, ref Point intercept, Point origin, Vector direct, ref Color color, float distance)
+        {
+
+            color.R += (int)(obj.color.R * (100 - obj.color.Mirroring) / 100 * distance);
+            color.G += (int)(obj.color.G * (100 - obj.color.Mirroring) / 100 * distance);
+            color.B += (int)(obj.color.B * (100 - obj.color.Mirroring) / 100 * distance);
+            color.Mirroring += (100 - obj.color.Mirroring);
+
+            if (color.Mirroring >= 100)
+                return;
+
+            var normal = obj.GetNormal(intercept);
+            Vector reflected = direct - 2 * (direct * normal)*normal;
+            
+            var minDistance = TheNearestTree(reflected, tree, intercept, out IObject newObject, out Point newIntercept);
+
+            
+
+            origin = new Point(intercept.X, intercept.Y, intercept.Z);
+
+            obj = newObject;
+            intercept = newIntercept;
+
+            if (planes.Count >= 1)
+            {
+                float planeDist = float.MaxValue;
+                foreach (var item in planes)
+                {
+                    if (item.IsIntersection(origin, reflected))
+                    {
+                        var planeIntercept = item.WhereIntercept(origin, reflected);
+                        planeDist = Point.Distance(planeIntercept, origin);
+                        if (planeDist < minDistance)
+                        {
+                            minDistance = planeDist;
+                            obj = item;
+                            intercept = planeIntercept;
+                        }
+                    }
+                }
+            }
+
+            var minNumber = -(light.Vector * Vector.Normilize(obj.GetNormal(intercept)));
+
+            if (obj != null && obj.color.Mirroring == 0)
+            {
+                color.R += (int)(obj.color.R * (100 - color.Mirroring) / 100 * minNumber);
+                color.G += (int)(obj.color.G * (100 - color.Mirroring) / 100 * minNumber);
+                color.B += (int)(obj.color.B * (100 - color.Mirroring) / 100 * minNumber);
+
+                return;
+            }
+
+            if (obj != null && obj.color.Mirroring > 0)
+            {
+                MirrorVector(ref obj, ref intercept, origin, reflected, ref color, minNumber);
+            }
+
+            
+
         }
 
 

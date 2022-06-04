@@ -1,6 +1,7 @@
 ﻿using ComputerGraphics.Types;
 using System.Collections.Generic;
 using ComputerGraphics.Tree;
+using ComputerGraphics.Materials;
 
 namespace ComputerGraphics.Interfaces
 {
@@ -16,5 +17,9 @@ namespace ComputerGraphics.Interfaces
         public Point getCoordsofMax();
 
         public bool IsInBox(Box box);
+
+        public Color color { get; set; }
+
+        public void SetColor(int r, int g, int b, int mirror);
     }
 }

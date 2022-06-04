@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using ComputerGraphics.Interfaces;
+using ComputerGraphics.Materials;
 using ComputerGraphics.Tree;
 using ComputerGraphics.Types;
 
@@ -12,15 +13,23 @@ namespace ComputerGraphics.Objects
         private Point center;
         private float radius;
 
+        public Color color { get; set; } 
+
         public Sphere(Point center, float radius)
         {
             this.center = center;
             this.radius = radius;
+            color = new Color(255, 255, 255, 0);
         }
 
         public float Radius
         {
             get { return radius; }
+        }
+
+        public void SetColor(int r, int g, int b, int mirror)
+        {
+            color = new Color(r, g, b, mirror);
         }
 
         public bool IsIntersection(Point start, Vector direction)

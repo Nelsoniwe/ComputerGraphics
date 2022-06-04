@@ -5,6 +5,10 @@ using System.IO;
 using System.Text;
 using ComputerGraphics.Scene;
 using System.Diagnostics;
+using ComputerGraphics.Interfaces;
+using System.Collections.Generic;
+using ComputerGraphics.Utility;
+using ComputerGraphics.Materials;
 
 namespace ComputerGraphics
 {
@@ -19,23 +23,28 @@ namespace ComputerGraphics
             //int width = 500;
             //int height = 500;
 
-            Camera camera = new Camera(new Point(1, 0, -2f), new Vector(0, 0, 1), height, width);
+            Camera camera = new Camera(new Point(0, 0, -2.1f), new Vector(0, 0, 1), height, width);
             Scene.Scene scene = new Scene.Scene(camera);
 
             Light light = new Light(Vector.Normilize(new Vector(-1, 0, 1)));
             scene.AddLight(light);
 
-            Plane plane = new Plane(new Point(-1, 0, 0), new Vector(1, 0, 0));
+            Plane plane = new Plane(new Point(-0.6f, 0, 0), new Vector(1, 0, 0));
+            plane.SetColor(248, 252, 239, 0);
             scene.AddObject(plane);
 
-            //string source = @"C:\Users\Denys\Desktop\asdadsa.obj";
-            //string source = @"C:\Users\Denys\Desktop\cow.obj";
-            //List<IObject> triangles = ObjectFile.ReadObjectFile(source);
-            //ObjectsInObject objects = new ObjectsInObject(triangles);
-            //objects.RotateZ(0);
-            //objects.RotateX(0);
-            //objects.RotateY(90);
-            //scene.AddObjects(triangles);
+            //Sphere sphere = new Sphere(new Point(1,1,1), 1);
+            //sphere.SetColor(255, 255, 136, 0);
+            //scene.AddObject(sphere);
+
+            var source = @"C:\Users\lenovo\Downloads\Telegram Desktop\cow.obj";
+            List<IObject> triangles = ObjectFile.ReadObjectFile(source);
+            ObjectsInObject objects = new ObjectsInObject(triangles);
+            objects.RotateY(90);
+            objects.RotateX(45);
+            objects.Scale(2f, 2f, 2f);
+            objects.SetColor(147, 112, 219, 99);
+            scene.AddObjects(triangles);
 
             scene.MakeTree();
             Console.WriteLine("tree created");
@@ -43,12 +52,12 @@ namespace ComputerGraphics
             Stopwatch s = new Stopwatch();
             s.Start();
 
-            float[,] screen = scene.GetScreenArray(1);
+            Color[,] screen = scene.GetScreenArray(50);
             s.Stop();
             Console.WriteLine($"Render time: {s.ElapsedMilliseconds}");
 
-            string filename = @"C:\Users\Denys\Desktop\task.ppm"; //destination
-            //string filename = @"C:\Users\lenovo\OneDrive\Рабочий стол\compGraph\task.ppm"; //destination
+            //string filename = @"C:\Users\Denys\Desktop\task.ppm"; //destination
+            string filename = @"C:\Users\lenovo\OneDrive\Рабочий стол\compGraph\task1.ppm"; //destination
             StreamWriter destination = new StreamWriter(filename);
             destination.Write("P3\n{0} {1} {2}\n", width, height, 255);
             destination.Flush();
@@ -58,20 +67,12 @@ namespace ComputerGraphics
             {
                 for (int j = 0; j < width; j++)
                 {
-                    int a = Convert.ToInt32(screen[i, j] * 255);
-                    if (screen[i, j] == 0)  //if no interception
-                        a = 255;
-
-                    if (a > 255)
-                        a = 255;
-                    if (a < 0)
-                        a = 0;
-
-                    output.Append(a);
+                    
+                    output.Append(screen[i, j].R);
                     output.Append(" ");
-                    output.Append(a);
+                    output.Append(screen[i, j].G);
                     output.Append(" ");
-                    output.Append(a);
+                    output.Append(screen[i, j].B);
                     output.Append(" ");
                 }
                 destination.WriteLine(output);
