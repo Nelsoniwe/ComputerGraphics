@@ -106,21 +106,21 @@ namespace Tests
 
         #region TrasRay
 
-        [Fact]
-        public void FindMinDistanceFromVectorToObjectsReturnCorrectValue()
-        {
-            List<IObject> objects = new List<IObject>();
-            Sphere sphere = new Sphere(new Point(-2, -2, 100), 4);
-            Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
-            Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
-            objects.Add(sphere);
-            objects.Add(sphere2);
-            objects.Add(plane);
-            Vector light = new Vector(0.5f, 0.5f, 0.7f);
+        //[Fact]
+        //public void FindMinDistanceFromVectorToObjectsReturnCorrectValue()
+        //{
+        //    List<IObject> objects = new List<IObject>();
+        //    Sphere sphere = new Sphere(new Point(-2, -2, 100), 4);
+        //    Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
+        //    Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
+        //    objects.Add(sphere);
+        //    objects.Add(sphere2);
+        //    objects.Add(plane);
+        //    Vector light = new Vector(0.5f, 0.5f, 0.7f);
 
-            var resDistance = Scene.TheNearest(light, objects, new Point(0, 0, -10), out IObject resObj, out Point resIntercept);
-            Assert.Equal(plane, resObj);
-        }
+        //    var resDistance = Scene.TheNearest(light, objects, new Point(0, 0, -10), out IObject resObj, out Point resIntercept);
+        //    Assert.Equal(plane, resObj);
+        //}
 
         #endregion
     }
