@@ -19,6 +19,8 @@ namespace ComputerGraphics.Scene
         private Camera camera;
         private List<ILight> lights = new List<ILight>();
 
+        public delegate float GetNearest(Point start, Vector vector, out IObject obj, out Point intercept);
+
         public Scene(Camera camera)
         {
             this.camera = camera;
@@ -52,17 +54,17 @@ namespace ComputerGraphics.Scene
             this.lights.Add(light);
         }
 
-        public float TheNearest(Vector vector, out IObject obj, out Point intercept)
+        public float TheNearest(Point start, Vector vector, out IObject obj, out Point intercept)
         {
             float minDistance = Int32.MaxValue;
             obj = null;
             intercept = null;
             for (int i = 0; i < objects.Count; i++)
             {
-                if (objects[i].IsIntersection(camera.Position, vector))
+                if (objects[i].IsIntersection(start, vector))
                 {
-                    Point tempIntercept = objects[i].WhereIntercept(camera.Position, vector);
-                    float distance = Point.Distance(tempIntercept, camera.Position);
+                    Point tempIntercept = objects[i].WhereIntercept(start, vector);
+                    float distance = Point.Distance(tempIntercept, start);
                     if (distance < minDistance)
                     {
                         minDistance = distance;
@@ -129,7 +131,17 @@ namespace ComputerGraphics.Scene
             return minDistance;
         }
 
+        public Color[,] GetScreenArrayTree(int taskCount)
+        {
+            return GetScreenArray(TheNearestTree, taskCount);
+        }
+
         public Color[,] GetScreenArray(int taskCount)
+        {
+            return GetScreenArray(TheNearest, taskCount);
+        }
+
+        private Color[,] GetScreenArray(GetNearest getNearest,int taskCount)
         {
             camera.RefreshScreen();
 
@@ -158,7 +170,8 @@ namespace ComputerGraphics.Scene
                     taskPixelStart,
                     taskPixelStart + taskpartPixelCount,
                     camera.Width,
-                    camera.Height));
+                    camera.Height,
+                    getNearest));
 
                 partPixelCounter += partPixelCount;
             }
@@ -184,7 +197,7 @@ namespace ComputerGraphics.Scene
             return camera.Screen;
         }
 
-        delegate float GetNearest(Point start, Vector vector, out IObject obj, out Point intercept);
+        
         private Color GetColorInterception(Point origin, Vector ray, GetNearest getNearest)
         {
             Color result = new Color(0, 0, 0, 0);
@@ -275,6 +288,7 @@ namespace ComputerGraphics.Scene
             {
                 Vector direction = lights[i].GetDirectionToLight(origin);
                 TheNearestTriangleIgnoreFirstTree(direction, origin, nearestObj,out IObject anotherObj ,out Point nearestIntercept);
+
                 if (anotherObj != null)
                 {
                     result.Add(lights[i]);
@@ -322,7 +336,7 @@ namespace ComputerGraphics.Scene
             return mixColor;
         }
 
-        public Color[,] GetPartScreenArray(int startWidth, int endWidth, int width, int height)
+        public Color[,] GetPartScreenArray(int startWidth, int endWidth, int width, int height,GetNearest getNearest)
         {
             //Calculation start point
             Color[,] partScreen = new Color[height, endWidth - startWidth];
@@ -356,8 +370,8 @@ namespace ComputerGraphics.Scene
 
                     Color result = new Color(0, 0, 0, 0);
 
-                    result = GetColorInterception(camera.Position, ray, TheNearestTree);
-                    result = GetShadowInterception(camera.Position, result, ray, TheNearestTree);
+                    result = GetColorInterception(camera.Position, ray, getNearest);
+                    result = GetShadowInterception(camera.Position, result, ray, getNearest);
 
 
 
@@ -379,7 +393,7 @@ namespace ComputerGraphics.Scene
             color.B += (int)(obj.color.B * (100 - obj.color.Mirroring) / 100 * distance);
             color.Mirroring += (100 - obj.color.Mirroring);
             color.Mirroring += 1;
-
+            
             if (color.Mirroring >= 100)
                 return;
 
@@ -423,15 +437,18 @@ namespace ComputerGraphics.Scene
                 color.R += (int)(obj.color.R * mirrorCoef);
                 color.G += (int)(obj.color.G * mirrorCoef);
                 color.B += (int)(obj.color.B * mirrorCoef);
+
+                
                 return;
             }
 
             if (obj != null && obj.color.Mirroring > 0)
             {
+                
                 MirrorVector(ref obj, ref intercept, origin, reflected, ref color, minNumber);
             }
-        }
 
-       
+            
+        }
     }
 }

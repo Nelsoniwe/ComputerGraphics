@@ -51,31 +51,45 @@ namespace ComputerGraphics
             objects.SetColor(147, 112, 219, 0);
             scene.AddObjects(triangles);
 
-
             scene.MakeTree();
+
+
             Console.WriteLine("tree created");
 
             Stopwatch s = new Stopwatch();
             s.Start();
 
+            Color[,] screenTree = scene.GetScreenArrayTree(50);
+            s.Stop();
+
+            Console.WriteLine($"Render time with tree:: {s.ElapsedMilliseconds}");
+
+            s.Restart();
             Color[,] screen = scene.GetScreenArray(50);
             s.Stop();
 
+            Console.WriteLine($"Render time without tree: {s.ElapsedMilliseconds}");
 
-            Console.WriteLine($"Render time: {s.ElapsedMilliseconds}");
 
             string filename = @"C:\Users\Denys\Desktop\task.ppm"; //destination
+            string filename1 = @"C:\Users\Denys\Desktop\task1.ppm"; //destination
+            WriteImage(filename, screenTree);
+            WriteImage(filename1, screen);
+        }
+
+        static void WriteImage(string filename, Color[,] screen)
+        {
             //string filename = @"C:\Users\lenovo\OneDrive\Рабочий стол\compGraph\task1.ppm"; //destination
             StreamWriter destination = new StreamWriter(filename);
-            destination.Write("P3\n{0} {1} {2}\n", width, height, 255);
+            destination.Write("P3\n{0} {1} {2}\n", screen.GetUpperBound(1), screen.GetUpperBound(0), 255);
             destination.Flush();
 
             StringBuilder output = new StringBuilder("");
-            for (int i = 0; i < height; i++)
+            for (int i = 0; i < screen.GetUpperBound(0); i++)
             {
-                for (int j = 0; j < width; j++)
+                for (int j = 0; j < screen.GetUpperBound(1); j++)
                 {
-                    
+
                     output.Append(screen[i, j].R);
                     output.Append(" ");
                     output.Append(screen[i, j].G);

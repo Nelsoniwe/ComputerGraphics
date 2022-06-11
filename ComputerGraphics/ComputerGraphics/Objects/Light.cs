@@ -60,7 +60,7 @@ namespace ComputerGraphics.Objects
                 originColor.R * (100 - Power) / 100,
                 originColor.G * (100 - Power) / 100,
                 originColor.B * (100 - Power) / 100,
-                0
+                originColor.Mirroring
             );
         }
     }
