@@ -26,16 +26,19 @@ namespace ComputerGraphics
             Camera camera = new Camera(new Point(0, 0, -2.1f), new Vector(0, 0, 1), height, width,60);
             Scene.Scene scene = new Scene.Scene(camera);
 
-            Light light = new Light(Vector.Normilize(new Vector(-1, 1, 1)));
+            Light light = new Light(Vector.Normilize(new Vector(-1, 0.6f, 0.8f)),20);
             scene.AddLight(light);
 
-            //Plane plane = new Plane(new Point(-0.6f, 0, 0), new Vector(1, 0, 0));
-            //plane.SetColor(255, 255, 255, 40);
-            //scene.AddObject(plane);
+            Light light2 = new Light(Vector.Normilize(new Vector(-1, -0.6f, 0.8f)), 20);
+            scene.AddLight(light2);
 
-            //Sphere sphere = new Sphere(new Point(1,1,1), 1);
-            //sphere.SetColor(255, 255, 136, 0);
-            //scene.AddObject(sphere);
+            Plane plane = new Plane(new Point(-0.6f, 0, 0), new Vector(1, 0, 0));
+            plane.SetColor(255, 255, 255, 50);
+            scene.AddObject(plane);
+
+            Sphere sphere = new Sphere(new Point(1, -1.5f, 1), 1);
+            sphere.SetColor(255, 255, 136, 50);
+            scene.AddObject(sphere);
 
             //var source = @"C:\Users\lenovo\Downloads\Telegram Desktop\cow.obj";
 
@@ -48,38 +51,6 @@ namespace ComputerGraphics
             objects.SetColor(147, 112, 219, 0);
             scene.AddObjects(triangles);
 
-            Plane plane1 = new Plane(new Point(-1, 0, 0), new Vector(1, 0, 0));
-            plane1.SetColor(248, 252, 0, 0);
-            scene.AddObject(plane1);
-
-            Plane plane2 = new Plane(new Point(1, 0, 0), new Vector(-1, 0, 0));
-            plane2.SetColor(248, 252, 0, 0);
-            scene.AddObject(plane2);
-
-            Plane plane3 = new Plane(new Point(0, -1, 0), new Vector(0, 1, 0));
-            plane3.SetColor(248, 252, 0, 0);
-            scene.AddObject(plane3);
-
-            Plane plane4 = new Plane(new Point(0, 1, 0), new Vector(0, -1, 0));
-            plane4.SetColor(248, 252, 0, 0);
-            scene.AddObject(plane4);
-
-            Plane plane5 = new Plane(new Point(0, 0, -1), new Vector(0, 0, 1));
-            plane5.SetColor(248, 252, 0, 0);
-            scene.AddObject(plane5);
-
-            Plane plane6 = new Plane(new Point(0, 0, 1), new Vector(0, 0, -1));
-            plane6.SetColor(248, 252, 0, 0);
-            scene.AddObject(plane6);
-
-
-            //IObject triangle = new Triangle(new Point(0, -1, 1), new Point(1, 0, 0), new Point(0, 1, 1), new Vector(-1, 0, -1), new Vector(1, 0, -1), new Vector(-1, 0, -1));
-            //triangle.SetColor(255, 0, 0, 1);
-            //scene.AddObject(triangle);
-
-            //IObject sp = new Sphere(new Point(0, 0, 0), 1f);
-            //sp.SetColor(255, 0, 0, 0);
-            //scene.AddObject(sp);
 
             scene.MakeTree();
             Console.WriteLine("tree created");
@@ -89,6 +60,8 @@ namespace ComputerGraphics
 
             Color[,] screen = scene.GetScreenArray(50);
             s.Stop();
+
+
             Console.WriteLine($"Render time: {s.ElapsedMilliseconds}");
 
             string filename = @"C:\Users\Denys\Desktop\task.ppm"; //destination
