@@ -47,7 +47,7 @@ namespace Tests
         {
             var vector = new Vector(x, y, z);
             var result = Vector.Normilize(vector);
-            Assert.Equal((Math.Round(expX, 1), Math.Round(expY, 1), Math.Round(expZ, 1)), (result.X, result.Y, result.Z));
+            Assert.Equal((Math.Round(expX, 1), Math.Round(expY, 1), Math.Round(expZ, 1)), (Math.Round(result.X, 1), Math.Round(result.Y, 1), Math.Round(result.Z, 1)));
         }
 
         [Theory]
@@ -66,7 +66,7 @@ namespace Tests
         [ClassData(typeof(IsIntersectionWithPlaneTestData))]
         public void IsIntersectionOfVectorAndPlaneReturnCorrectValue(Point start, Vector direction, bool expected)
         {
-            Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
+            Plane plane = new Plane(new Point(0, 0, 0), new Vector(1, 0, 0));
             var result = plane.IsIntersection(start, direction);
             Assert.Equal(expected, result);
         }
@@ -75,7 +75,7 @@ namespace Tests
         [ClassData(typeof(WhereIsIntersectionWithPlaneTestData))]
         public void WhereIsIntersectionOfVectorAndPlaneReturnPoint(Point start, Vector direction, Point expected)
         {
-            Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
+            Plane plane = new Plane(new Point(0, 0, 0), new Vector(1, 0, 0));
             var result = plane.WhereIntercept(start, direction);
             Assert.Equal((expected.X, expected.Y, expected.Z), (result.X, result.Y, result.Z));
         }
@@ -99,30 +99,11 @@ namespace Tests
         {
             Sphere sphere = new Sphere(new Point(-7, 5, 2), 2);
             var result = sphere.WhereIntercept(start, direction);
-            Assert.Equal((expected.X, expected.Y, expected.Z), (Math.Round(result.X, 2), Math.Round(result.Y, 2), Math.Round(result.Z, 2)));
+            Assert.Equal((Math.Round(expected.X, 2), Math.Round(expected.Y, 2), Math.Round(expected.Z, 2)), (Math.Round(result.X, 2), Math.Round(result.Y, 2), Math.Round(result.Z, 2)));
         }
 
         #endregion
 
-        #region TrasRay
-
-        //[Fact]
-        //public void FindMinDistanceFromVectorToObjectsReturnCorrectValue()
-        //{
-        //    List<IObject> objects = new List<IObject>();
-        //    Sphere sphere = new Sphere(new Point(-2, -2, 100), 4);
-        //    Sphere sphere2 = new Sphere(new Point(0, 2, 10), 2);
-        //    Plane plane = new Plane(new Point(2, 1, 1), new Vector(1, 0, 0));
-        //    objects.Add(sphere);
-        //    objects.Add(sphere2);
-        //    objects.Add(plane);
-        //    Vector light = new Vector(0.5f, 0.5f, 0.7f);
-
-        //    var resDistance = Scene.TheNearest(light, objects, new Point(0, 0, -10), out IObject resObj, out Point resIntercept);
-        //    Assert.Equal(plane, resObj);
-        //}
-
-        #endregion
     }
 
     #region TestData
@@ -167,8 +148,8 @@ namespace Tests
         public IEnumerator<object[]> GetEnumerator()
         {
             yield return new object[] { new Point(0, 0, 1), new Vector(0, 0, 1), false };
-            yield return new object[] { new Point(0, 0, 1), new Vector(-2, 0, 1), false };
-            yield return new object[] { new Point(0, 0, 1), new Vector(1, 1, 1), true };
+            yield return new object[] { new Point(0, 0, 1), new Vector(-2, 0, 1), true };
+            yield return new object[] { new Point(2, 1, 1), new Vector(1, 0, 0), false };
         }
         
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
@@ -178,9 +159,9 @@ namespace Tests
     {
         public IEnumerator<object[]> GetEnumerator()
         {
-            yield return new object[] { new Point(0, 0, 1), new Vector(1, 1, 1), new Point(2, 2, 3) };
-            yield return new object[] { new Point(1, 0, 1), new Vector(1, 1, 1), new Point(2, 1, 2) };
-            yield return new object[] { new Point(0, 1, 1), new Vector(1, 1, 1), new Point(2, 3, 3) };
+            yield return new object[] { new Point(1, 1, 1), new Vector(-1, 1, 1), new Point(0, 2, 2) };
+            yield return new object[] { new Point(1, -1, 1), new Vector(-1, 0, 0), new Point(0, -1, 1) };
+            yield return new object[] { new Point(0, 1, 1), new Vector(-1, 1, 1), new Point(0, 1, 1) };
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
